@@ -14,6 +14,9 @@
     "lint": "eslint src",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "dependencies": {
+    "@event-platform/shared": "workspace:*"
+  },
   "devDependencies": {
     "@event-platform/config": "workspace:*",
     "eslint": "^9.17.0",

@@ -1,5 +1,5 @@
 {
-  "extends": "@event-platform/config/typescript/react-library.json",
+  "extends": "@event-platform/config/typescript/library.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src"

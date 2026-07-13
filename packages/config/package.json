@@ -6,8 +6,12 @@
   "exports": {
     "./eslint/base.js": "./eslint/base.js",
     "./typescript/base.json": "./typescript/base.json",
+    "./typescript/library.json": "./typescript/library.json",
     "./typescript/react-library.json": "./typescript/react-library.json",
-    "./typescript/nextjs.json": "./typescript/nextjs.json"
+    "./typescript/nextjs.json": "./typescript/nextjs.json",
+    "./tailwind/preset.js": "./tailwind/preset.js",
+    "./tailwind/tokens": "./tailwind/tokens.ts",
+    "./tailwind/base.css": "./tailwind/base.css"
   },
   "scripts": {
     "build": "node -e \"process.exit(0)\"",
