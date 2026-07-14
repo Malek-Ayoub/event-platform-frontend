@@ -1,4 +1,4 @@
-export { AppShell } from './app-shell.js';
+export { AppShell, DEFAULT_MAIN_CONTENT_ID } from './app-shell.js';
 export type { AppShellProps } from './app-shell.js';
 export { Container, containerVariants } from './container.js';
 export type { ContainerProps } from './container.js';
@@ -29,5 +29,7 @@ export { NotFound, NotFoundState } from './not-found-state.js';
 export type { NotFoundStateProps } from './not-found-state.js';
 export { PublicLayout } from './public-layout.js';
 export type { PublicLayoutProps } from './public-layout.js';
+export { SkipLink } from './skip-link.js';
+export type { SkipLinkProps } from './skip-link.js';
 export { Section, sectionVariants } from './section.js';
 export type { SectionProps } from './section.js';

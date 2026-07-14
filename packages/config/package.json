@@ -11,6 +11,7 @@
     "./typescript/nextjs.json": "./typescript/nextjs.json",
     "./tailwind/preset.js": "./tailwind/preset.js",
     "./tailwind/tokens": "./tailwind/tokens.ts",
+    "./tailwind/breakpoints": "./tailwind/breakpoints.ts",
     "./tailwind/base.css": "./tailwind/base.css"
   },
   "scripts": {

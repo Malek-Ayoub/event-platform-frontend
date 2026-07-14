@@ -12,6 +12,10 @@
       "types": "./dist/components/layout/index.d.ts",
       "import": "./dist/components/layout/index.js"
     },
+    "./overlay": {
+      "types": "./dist/components/overlay/index.d.ts",
+      "import": "./dist/components/overlay/index.js"
+    },
     "./globals.css": "./src/styles/globals.css",
     "./tailwind.config": "./tailwind.config.js"
   },

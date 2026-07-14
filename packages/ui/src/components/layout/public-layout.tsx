@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { AppShell } from './app-shell.js';
+import { AppShell, DEFAULT_MAIN_CONTENT_ID } from './app-shell.js';
 
 export type PublicLayoutProps = {
   children: ReactNode;
@@ -9,6 +9,9 @@ export type PublicLayoutProps = {
   headerClassName?: string;
   mainClassName?: string;
   footerClassName?: string;
+  mainId?: string;
+  showSkipLink?: boolean;
+  skipLink?: ReactNode;
 };
 
 export function PublicLayout({
@@ -19,6 +22,9 @@ export function PublicLayout({
   headerClassName,
   mainClassName,
   footerClassName,
+  mainId = DEFAULT_MAIN_CONTENT_ID,
+  showSkipLink = true,
+  skipLink,
 }: PublicLayoutProps) {
   return (
     <AppShell
@@ -28,6 +34,9 @@ export function PublicLayout({
       headerClassName={headerClassName}
       mainClassName={mainClassName}
       footerClassName={footerClassName}
+      mainId={mainId}
+      showSkipLink={showSkipLink}
+      skipLink={skipLink}
     >
       {children}
     </AppShell>
