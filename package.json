@@ -10,6 +10,9 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "sync:openapi": "pnpm --filter @event-platform/api-client sync:openapi",
+    "generate:api": "pnpm --filter @event-platform/api-client generate:api",
+    "generate:api:check": "pnpm --filter @event-platform/api-client generate:api:check",
     "prepare": "husky"
   },
   "devDependencies": {

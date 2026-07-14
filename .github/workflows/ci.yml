@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate API clients
+        run: pnpm generate:api:check
+
       - name: Lint
         run: pnpm lint
 
