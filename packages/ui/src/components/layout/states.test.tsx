@@ -14,6 +14,7 @@ describe('global states', () => {
 
     const state = screen.getByRole('status');
     expect(state.getAttribute('aria-busy')).toBe('true');
+    expect(state.getAttribute('aria-live')).toBe('polite');
     expect(screen.getByText('Fetching page')).toBeTruthy();
   });
 
@@ -42,5 +43,8 @@ describe('global states', () => {
 
     expect(screen.getByText('404')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Home' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Page not found' })).toBeTruthy();
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.queryByRole('status')).toBeNull();
   });
 });

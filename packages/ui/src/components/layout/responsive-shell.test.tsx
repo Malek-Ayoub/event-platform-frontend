@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { AppShell, DEFAULT_MAIN_CONTENT_ID } from './app-shell.js';
 import { SkipLink } from './skip-link.js';
@@ -28,6 +28,21 @@ describe('responsive shell primitives', () => {
     expect(skipLink.getAttribute('href')).toBe(`#${DEFAULT_MAIN_CONTENT_ID}`);
     expect(main.id).toBe(DEFAULT_MAIN_CONTENT_ID);
     expect(main.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('moves focus to the main landmark when the skip link is activated', () => {
+    render(
+      <AppShell>
+        <p>Body</p>
+      </AppShell>,
+    );
+
+    const skipLink = screen.getByRole('link', { name: 'Skip to main content' });
+    const main = screen.getByRole('main');
+
+    fireEvent.click(skipLink);
+
+    expect(document.activeElement).toBe(main);
   });
 
   it('exposes a single header landmark when provided', () => {

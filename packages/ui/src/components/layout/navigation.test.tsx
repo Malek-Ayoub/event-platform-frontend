@@ -62,7 +62,7 @@ describe('navigation shell', () => {
     ).not.toBeNull();
   });
 
-  it('renders Navigation primitives with active link styling', () => {
+  it('marks the active navigation link as the current page', () => {
     render(
       <Navigation aria-label="Test">
         <NavigationList>
@@ -79,9 +79,7 @@ describe('navigation shell', () => {
     );
 
     expect(screen.getByRole('navigation', { name: 'Test' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Home' }).className).toContain('text-foreground');
-    expect(screen.getByRole('link', { name: 'Events' }).className).toContain(
-      'text-muted-foreground',
-    );
+    expect(screen.getByRole('link', { name: 'Home', current: 'page' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Events' }).getAttribute('aria-current')).toBeNull();
   });
 });

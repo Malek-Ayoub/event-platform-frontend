@@ -39,6 +39,19 @@ describe('Drawer overlay', () => {
     });
   });
 
+  it('closes when Escape is pressed', async () => {
+    render(<ControlledDrawer />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open drawer' }));
+    expect(await screen.findByRole('dialog')).toBeTruthy();
+
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).toBeNull();
+    });
+  });
+
   it('does not keep the drawer mounted after close', async () => {
     const onOpenChange = vi.fn();
 

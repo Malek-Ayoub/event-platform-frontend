@@ -92,6 +92,7 @@ export const NavigationLink = forwardRef<HTMLAnchorElement, NavigationLinkProps>
         ref={ref}
         className={cn(navigationLinkVariants({ active, className }))}
         data-slot="navigation-link"
+        aria-current={active ? 'page' : undefined}
         {...props}
       />
     );

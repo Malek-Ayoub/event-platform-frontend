@@ -54,6 +54,34 @@ describe('public-web responsive navigation', () => {
     await waitFor(() => {
       expect(document.activeElement).toBe(menuButton);
     });
+
+    expect(menuButton.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('closes the drawer when Escape is pressed and restores focus', async () => {
+    render(
+      <MobileNavigationDrawer contentId="mobile-navigation">
+        <nav aria-label="Primary mobile">Mobile links</nav>
+      </MobileNavigationDrawer>,
+    );
+
+    const menuButton = screen.getByRole('button', { name: 'Open menu' });
+
+    fireEvent.click(menuButton);
+    expect(await screen.findByRole('dialog', { name: 'Mobile navigation' })).toBeTruthy();
+    expect(menuButton.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).toBeNull();
+    });
+
+    await waitFor(() => {
+      expect(document.activeElement).toBe(menuButton);
+    });
+
+    expect(menuButton.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('does not shift a layout sentinel when the drawer opens', async () => {

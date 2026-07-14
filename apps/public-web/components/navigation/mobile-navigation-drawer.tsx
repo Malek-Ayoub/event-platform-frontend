@@ -51,6 +51,7 @@ export function MobileNavigationDrawer({ children, contentId }: MobileNavigation
         className="md:hidden"
         aria-expanded={open}
         aria-controls={panelId}
+        aria-haspopup="dialog"
         data-slot="mobile-menu-button"
         data-breakpoint="below-md"
         onClick={() => setOpen(true)}
