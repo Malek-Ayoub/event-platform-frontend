@@ -4,3 +4,12 @@ export type LandingSectionProps = {
   tenant?: TenantBranding;
   className?: string;
 };
+
+export type FeaturedEvent = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  bannerUrl: string | null;
+  startDatetime: string;
+};
