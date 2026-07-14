@@ -1,6 +1,7 @@
 import { Container, Section } from '@event-platform/ui/layout';
+import type { LandingSectionProps } from '@/components/landing/types';
 
-export function FeaturedEventsSection() {
+export function FeaturedEventsSection(_props: LandingSectionProps) {
   return (
     <Section spacing="lg" variant="muted" aria-label="Featured events">
       <Container>

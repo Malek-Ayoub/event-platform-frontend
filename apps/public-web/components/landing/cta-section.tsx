@@ -1,6 +1,7 @@
 import { Container, Section } from '@event-platform/ui/layout';
+import type { LandingSectionProps } from '@/components/landing/types';
 
-export function CTASection() {
+export function CTASection(_props: LandingSectionProps) {
   return (
     <Section spacing="lg" variant="muted" aria-label="Call to action">
       <Container>

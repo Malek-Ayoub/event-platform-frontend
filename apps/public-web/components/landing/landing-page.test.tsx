@@ -1,5 +1,7 @@
+import { createFallbackTenant, TenantProvider } from '@event-platform/tenant';
 import { PublicLayout } from '@event-platform/ui/layout';
 import { cleanup, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { LandingPage } from './landing-page';
 
@@ -10,13 +12,17 @@ const LANDING_SECTION_LABELS = [
   'Call to action',
 ] as const;
 
+function renderLandingPage(ui: ReactNode = <LandingPage />) {
+  return render(<TenantProvider fallbackTenant={createFallbackTenant()}>{ui}</TenantProvider>);
+}
+
 describe('LandingPage composition', () => {
   afterEach(() => {
     cleanup();
   });
 
   it('renders all four landing sections', () => {
-    render(<LandingPage />);
+    renderLandingPage();
 
     for (const label of LANDING_SECTION_LABELS) {
       expect(screen.getByRole('region', { name: label })).toBeTruthy();
@@ -24,7 +30,7 @@ describe('LandingPage composition', () => {
   });
 
   it('keeps landing sections in the expected order', () => {
-    render(<LandingPage />);
+    renderLandingPage();
 
     const regions = screen.getAllByRole('region');
     expect(regions.map((region) => region.getAttribute('aria-label'))).toEqual([
@@ -33,7 +39,7 @@ describe('LandingPage composition', () => {
   });
 
   it('composes inside the application shell without breaking landmarks', () => {
-    render(
+    renderLandingPage(
       <PublicLayout header={<div>Site header</div>} footer={<div>Site footer</div>}>
         <LandingPage />
       </PublicLayout>,

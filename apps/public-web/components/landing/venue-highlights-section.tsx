@@ -1,6 +1,7 @@
 import { Container, Section } from '@event-platform/ui/layout';
+import type { LandingSectionProps } from '@/components/landing/types';
 
-export function VenueHighlightsSection() {
+export function VenueHighlightsSection(_props: LandingSectionProps) {
   return (
     <Section spacing="lg" aria-label="Venue highlights">
       <Container>
