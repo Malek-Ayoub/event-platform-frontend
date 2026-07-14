@@ -13,3 +13,12 @@ export type FeaturedEvent = {
   bannerUrl: string | null;
   startDatetime: string;
 };
+
+export type VenueHighlight = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  imageUrl: string | null;
+  city: string;
+};
