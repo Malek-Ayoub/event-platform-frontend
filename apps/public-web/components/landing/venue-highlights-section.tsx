@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@event-platform/ui';
 import { Container, Section } from '@event-platform/ui/layout';
+import { SectionEmptyState } from '@/components/landing/section-empty-state';
 import type { LandingSectionProps, VenueHighlight } from '@/components/landing/types';
 import { getVenueHighlights } from '@/lib/mock-data/venue-highlights';
 
@@ -44,17 +45,6 @@ function VenueHighlightCard({ venue }: { venue: VenueHighlight }) {
   );
 }
 
-function VenueHighlightsEmptyState() {
-  return (
-    <div className="max-w-2xl space-y-2" data-slot="venue-highlights-empty-state" role="status">
-      <p className="text-lg font-semibold tracking-tight">No venue highlights right now</p>
-      <p className="text-muted-foreground">
-        Check back soon for popular venues hosting upcoming events.
-      </p>
-    </div>
-  );
-}
-
 export function VenueHighlightsSection({ className }: LandingSectionProps) {
   const venues = getVenueHighlights();
 
@@ -70,7 +60,11 @@ export function VenueHighlightsSection({ className }: LandingSectionProps) {
           </div>
 
           {venues.length === 0 ? (
-            <VenueHighlightsEmptyState />
+            <SectionEmptyState
+              sectionName="venue-highlights"
+              title="No venue highlights right now"
+              description="Check back soon for popular venues hosting upcoming events."
+            />
           ) : (
             <ul className="grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {venues.map((venue) => (

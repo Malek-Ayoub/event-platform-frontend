@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@event-platform/ui';
 import { Container, Section } from '@event-platform/ui/layout';
+import { SectionEmptyState } from '@/components/landing/section-empty-state';
 import type { FeaturedEvent, LandingSectionProps } from '@/components/landing/types';
 import { getFeaturedEvents } from '@/lib/mock-data/featured-events';
 
@@ -53,17 +54,6 @@ function FeaturedEventCard({ event }: { event: FeaturedEvent }) {
   );
 }
 
-function FeaturedEventsEmptyState() {
-  return (
-    <div className="max-w-2xl space-y-2" data-slot="featured-events-empty-state" role="status">
-      <p className="text-lg font-semibold tracking-tight">No featured events right now</p>
-      <p className="text-muted-foreground">
-        Check back soon for upcoming events you can discover and book.
-      </p>
-    </div>
-  );
-}
-
 export function FeaturedEventsSection({ className }: LandingSectionProps) {
   const events = getFeaturedEvents();
 
@@ -79,7 +69,11 @@ export function FeaturedEventsSection({ className }: LandingSectionProps) {
           </div>
 
           {events.length === 0 ? (
-            <FeaturedEventsEmptyState />
+            <SectionEmptyState
+              sectionName="featured-events"
+              title="No featured events right now"
+              description="Check back soon for upcoming events you can discover and book."
+            />
           ) : (
             <ul className="grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {events.map((event) => (
