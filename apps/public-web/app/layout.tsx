@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { APP_NAMES } from '@event-platform/shared';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Event Platform — Public',
+  title: APP_NAMES.publicWeb,
 };
 
 export default function RootLayout({
