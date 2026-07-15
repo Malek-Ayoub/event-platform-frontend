@@ -3,22 +3,31 @@ import { EventCard } from '@/components/events/event-card';
 
 const PLACEHOLDER_EVENTS = [
   {
+    id: '1',
+    slug: 'summer-jazz-night',
     title: 'Summer Jazz Night',
     venue: 'Harborview Pavilion',
-    date: 'Aug 15, 2026, 7:30 PM',
-    price: 'From $45',
+    imageUrl: 'https://picsum.photos/seed/summer-jazz/640/360',
+    startDatetime: '2026-08-15T19:30:00.000Z',
+    price: { amount: 45, currency: 'USD' },
   },
   {
+    id: '2',
+    slug: 'tech-forward-summit',
     title: 'Tech Forward Summit',
     venue: 'The Loft at Market Street',
-    date: 'Sep 20, 2026, 9:00 AM',
-    price: 'From $120',
+    imageUrl: 'https://picsum.photos/seed/tech-summit/640/360',
+    startDatetime: '2026-09-20T09:00:00.000Z',
+    price: { amount: 120, currency: 'USD' },
   },
   {
+    id: '3',
+    slug: 'harvest-food-wine-festival',
     title: 'Harvest Food & Wine Festival',
     venue: 'Cedar Hall',
-    date: 'Oct 5, 2026, 5:00 PM',
-    price: 'From $65',
+    imageUrl: null,
+    startDatetime: '2026-10-05T17:00:00.000Z',
+    price: null,
   },
 ];
 
@@ -31,7 +40,7 @@ export function EventsGridPlaceholder() {
           data-slot="events-grid-placeholder-content"
         >
           {PLACEHOLDER_EVENTS.map((event) => (
-            <li key={event.title}>
+            <li key={event.id}>
               <EventCard {...event} />
             </li>
           ))}
