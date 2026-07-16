@@ -13,23 +13,19 @@ describe('CTASection', () => {
     cleanup();
   });
 
-  it('renders marketing copy and a primary call-to-action button', () => {
+  it('renders marketing copy and a Browse Events link to /events', () => {
     renderWithTenant(<CTASection />);
 
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Ready to host your next event?' }),
+      screen.getByRole('heading', { level: 2, name: 'Ready to find your next event?' }),
     ).toBeTruthy();
     expect(
       screen.getByText(
-        'Join the platform to publish events, manage venues, and reach audiences ready to book.',
+        'Browse upcoming events, discover what is happening near you, and book your next experience.',
       ),
     ).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Get started' })).toBeTruthy();
-  });
 
-  it('does not render a navigable link for the call to action', () => {
-    renderWithTenant(<CTASection />);
-
-    expect(screen.queryByRole('link')).toBeNull();
+    const browseLink = screen.getByRole('link', { name: 'Browse Events' });
+    expect(browseLink.getAttribute('href')).toBe('/events');
   });
 });
