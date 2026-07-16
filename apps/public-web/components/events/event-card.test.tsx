@@ -1,52 +1,45 @@
-import { formatCurrency, formatDateTime } from '@event-platform/shared';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { EventCard } from './event-card';
-import { EventsGridPlaceholder } from './events-grid-placeholder';
+import type { EventCardViewModel } from './events.query';
 
-const SAMPLE_EVENT = {
+const SAMPLE_EVENT: EventCardViewModel = {
   id: '1',
   slug: 'summer-jazz-night',
   title: 'Summer Jazz Night',
   venue: 'Harborview Pavilion',
   imageUrl: 'https://picsum.photos/seed/summer-jazz/640/360',
   startDatetime: '2026-08-15T19:30:00.000Z',
-  price: { amount: 45, currency: 'USD' },
+  dateLabel: 'Aug 15, 2026, 7:30 PM',
+  priceLabel: '$45.00',
 };
 
-const FREE_EVENT = {
+const FREE_EVENT: EventCardViewModel = {
   id: '3',
   slug: 'harvest-food-wine-festival',
   title: 'Harvest Food & Wine Festival',
   venue: 'Cedar Hall',
   imageUrl: null,
   startDatetime: '2026-10-05T17:00:00.000Z',
-  price: null,
+  dateLabel: 'Oct 5, 2026, 5:00 PM',
+  priceLabel: 'Free',
 };
-
-const EXPECTED_EVENT_TITLES = [
-  'Summer Jazz Night',
-  'Tech Forward Summit',
-  'Harvest Food & Wine Festival',
-] as const;
 
 describe('EventCard', () => {
   afterEach(() => {
     cleanup();
   });
 
-  it('renders formatted title, venue, date, and price', () => {
+  it('renders formatted title, venue, date, and price labels', () => {
     render(<EventCard {...SAMPLE_EVENT} />);
 
     expect(screen.getByRole('heading', { level: 3, name: 'Summer Jazz Night' })).toBeTruthy();
     expect(screen.getByText('Harborview Pavilion')).toBeTruthy();
-    expect(screen.getByText(formatDateTime(SAMPLE_EVENT.startDatetime))).toBeTruthy();
-    expect(
-      screen.getByText(formatCurrency(SAMPLE_EVENT.price.amount, SAMPLE_EVENT.price.currency)),
-    ).toBeTruthy();
+    expect(screen.getByText('Aug 15, 2026, 7:30 PM')).toBeTruthy();
+    expect(screen.getByText('$45.00')).toBeTruthy();
   });
 
-  it('renders Free when price is null', () => {
+  it('renders the free price label', () => {
     render(<EventCard {...FREE_EVENT} />);
 
     expect(screen.getByText('Free')).toBeTruthy();
@@ -68,35 +61,59 @@ describe('EventCard', () => {
   });
 });
 
-describe('EventsGridPlaceholder with EventCard', () => {
+describe('EventCard list rendering', () => {
   afterEach(() => {
     cleanup();
   });
 
+  const EVENTS: EventCardViewModel[] = [
+    SAMPLE_EVENT,
+    {
+      id: '2',
+      slug: 'tech-forward-summit',
+      title: 'Tech Forward Summit',
+      venue: 'The Loft at Market Street',
+      imageUrl: 'https://picsum.photos/seed/tech-summit/640/360',
+      startDatetime: '2026-09-20T09:00:00.000Z',
+      dateLabel: 'Sep 20, 2026, 9:00 AM',
+      priceLabel: '$120.00',
+    },
+    FREE_EVENT,
+  ];
+
   it('renders a single list with three list items', () => {
-    render(<EventsGridPlaceholder />);
+    render(
+      <ul>
+        {EVENTS.map((event) => (
+          <li key={event.id}>
+            <EventCard {...event} />
+          </li>
+        ))}
+      </ul>,
+    );
 
     expect(screen.getByRole('list')).toBeTruthy();
     expect(screen.getAllByRole('listitem')).toHaveLength(3);
   });
 
   it('renders an event card inside each list item in order', () => {
-    render(<EventsGridPlaceholder />);
+    render(
+      <ul>
+        {EVENTS.map((event) => (
+          <li key={event.id}>
+            <EventCard {...event} />
+          </li>
+        ))}
+      </ul>,
+    );
 
     const listItems = screen.getAllByRole('listitem');
 
     listItems.forEach((listItem, index) => {
       expect(within(listItem).getByRole('article')).toBeTruthy();
       expect(
-        within(listItem).getByRole('heading', { level: 3, name: EXPECTED_EVENT_TITLES[index] }),
+        within(listItem).getByRole('heading', { level: 3, name: EVENTS[index]?.title }),
       ).toBeTruthy();
     });
-  });
-
-  it('does not render links or buttons in the grid', () => {
-    render(<EventsGridPlaceholder />);
-
-    expect(screen.queryByRole('link')).toBeNull();
-    expect(screen.queryByRole('button')).toBeNull();
   });
 });

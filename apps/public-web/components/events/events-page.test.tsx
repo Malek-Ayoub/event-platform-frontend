@@ -2,8 +2,50 @@ import { createFallbackTenant, TenantProvider } from '@event-platform/tenant';
 import { PublicLayout } from '@event-platform/ui/layout';
 import { cleanup, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { EventCardViewModel } from '@/components/events/events.query';
 import { EventsPage } from './events-page';
+
+const MOCK_EVENTS: EventCardViewModel[] = [
+  {
+    id: '1',
+    slug: 'summer-jazz-night',
+    title: 'Summer Jazz Night',
+    venue: 'Harborview Pavilion',
+    imageUrl: 'https://picsum.photos/seed/summer-jazz/640/360',
+    startDatetime: '2026-08-15T19:30:00.000Z',
+    dateLabel: 'Aug 15, 2026, 7:30 PM',
+    priceLabel: '$45.00',
+  },
+  {
+    id: '2',
+    slug: 'tech-forward-summit',
+    title: 'Tech Forward Summit',
+    venue: 'The Loft at Market Street',
+    imageUrl: 'https://picsum.photos/seed/tech-summit/640/360',
+    startDatetime: '2026-09-20T09:00:00.000Z',
+    dateLabel: 'Sep 20, 2026, 9:00 AM',
+    priceLabel: '$120.00',
+  },
+  {
+    id: '3',
+    slug: 'harvest-food-wine-festival',
+    title: 'Harvest Food & Wine Festival',
+    venue: 'Cedar Hall',
+    imageUrl: null,
+    startDatetime: '2026-10-05T17:00:00.000Z',
+    dateLabel: 'Oct 5, 2026, 5:00 PM',
+    priceLabel: 'Free',
+  },
+];
+
+vi.mock('@/components/events/events.query', () => ({
+  usePublicEventsQuery: () => ({
+    data: MOCK_EVENTS,
+    isLoading: false,
+    isError: false,
+  }),
+}));
 
 function renderEventsPage(ui: ReactNode = <EventsPage />) {
   return render(<TenantProvider fallbackTenant={createFallbackTenant()}>{ui}</TenantProvider>);
@@ -24,7 +66,7 @@ describe('EventsPage composition', () => {
     ).toBeTruthy();
   });
 
-  it('renders EventsGridPlaceholder with event cards', () => {
+  it('renders EventsGrid with event cards from the public events query', () => {
     renderEventsPage();
 
     expect(screen.getByRole('region', { name: 'Events list' })).toBeTruthy();
@@ -35,7 +77,7 @@ describe('EventsPage composition', () => {
     ).toBeTruthy();
   });
 
-  it('keeps EventsHeader before EventsGridPlaceholder', () => {
+  it('keeps EventsHeader before EventsGrid', () => {
     renderEventsPage();
 
     const regions = screen.getAllByRole('region');

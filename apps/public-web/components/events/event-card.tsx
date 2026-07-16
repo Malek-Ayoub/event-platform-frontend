@@ -1,15 +1,7 @@
-import { formatCurrency, formatDateTime } from '@event-platform/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@event-platform/ui';
+import type { EventCardViewModel } from '@/components/events/events.query';
 
-export type EventCardProps = {
-  id: string;
-  slug: string;
-  title: string;
-  venue: string;
-  imageUrl: string | null;
-  startDatetime: string;
-  price: { amount: number; currency: string } | null;
-};
+export type EventCardProps = EventCardViewModel;
 
 function EventCardImage({ title, imageUrl }: Pick<EventCardProps, 'title' | 'imageUrl'>) {
   if (imageUrl) {
@@ -28,14 +20,6 @@ function EventCardImage({ title, imageUrl }: Pick<EventCardProps, 'title' | 'ima
   );
 }
 
-function formatEventPrice(price: EventCardProps['price']): string {
-  if (price === null) {
-    return 'Free';
-  }
-
-  return formatCurrency(price.amount, price.currency);
-}
-
 export function EventCard({
   id,
   slug,
@@ -43,7 +27,8 @@ export function EventCard({
   venue,
   imageUrl,
   startDatetime,
-  price,
+  dateLabel,
+  priceLabel,
 }: EventCardProps) {
   return (
     <article data-event-id={id} data-slug={slug}>
@@ -55,9 +40,9 @@ export function EventCard({
         <CardContent className="space-y-1">
           <p className="text-sm text-muted-foreground">{venue}</p>
           <time className="text-sm text-muted-foreground" dateTime={startDatetime}>
-            {formatDateTime(startDatetime)}
+            {dateLabel}
           </time>
-          <p className="text-sm font-medium">{formatEventPrice(price)}</p>
+          <p className="text-sm font-medium">{priceLabel}</p>
         </CardContent>
       </Card>
     </article>

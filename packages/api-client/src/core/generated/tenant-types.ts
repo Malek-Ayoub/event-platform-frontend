@@ -1277,6 +1277,38 @@ export interface components {
       /** Format: date-time */
       updated_at?: string | null;
     };
+    /** @description Public catalog projection of a published event for anonymous visitors. Intentionally separate from tenant EventResource. */
+    PublicEventListItem: {
+      /**
+       * @description Projection of `App\Http\Resources\Events\PublicEventListItemResource`.
+       * @example 1
+       */
+      id: number;
+      /** @example summer-jazz-night */
+      slug: string;
+      /** @example Summer Jazz Night */
+      title: string;
+      /** @example A short teaser description for the catalog listing. */
+      description: string;
+      /** @example Harborview Pavilion */
+      venue: string;
+      /** Format: uri */
+      image_url?: string | null;
+      /**
+       * Format: date-time
+       * @example 2026-08-15T19:30:00Z
+       */
+      starts_at: string;
+      starting_price?: {
+        /**
+         * @description Decimal amount as string (consistent with other money schemas in this spec).
+         * @example 45.00
+         */
+        amount?: string;
+        /** @example USD */
+        currency?: string;
+      } | null;
+    };
     SettlementSummary: {
       /** @example 125000.00 */
       gross_sales?: string;
