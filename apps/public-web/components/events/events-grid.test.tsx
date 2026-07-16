@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { EventCardViewModel } from '@/components/events/events.query';
 import { EventsGrid } from './events-grid';
@@ -35,7 +35,8 @@ describe('EventsGrid', () => {
       data: undefined,
       isLoading: true,
       isError: false,
-    } as ReturnType<typeof usePublicEventsQuery>);
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof usePublicEventsQuery>);
 
     render(<EventsGrid />);
 
@@ -43,16 +44,43 @@ describe('EventsGrid', () => {
     expect(screen.getByRole('status')).toBeTruthy();
   });
 
-  it('renders an error state when the public events query fails', () => {
+  it('renders an error state with a Retry action when the query fails', () => {
+    const refetch = vi.fn();
+
     vi.mocked(usePublicEventsQuery).mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: true,
-    } as ReturnType<typeof usePublicEventsQuery>);
+      refetch,
+    } as unknown as ReturnType<typeof usePublicEventsQuery>);
 
     render(<EventsGrid />);
 
     expect(screen.getByText('Unable to load events')).toBeTruthy();
+
+    const retryButton = screen.getByRole('button', { name: 'Retry' });
+    fireEvent.click(retryButton);
+
+    expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders an empty state when the query succeeds with no events', () => {
+    vi.mocked(usePublicEventsQuery).mockReturnValue({
+      data: [],
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof usePublicEventsQuery>);
+
+    render(<EventsGrid />);
+
+    const emptyState = screen.getByRole('status');
+    expect(emptyState.getAttribute('data-slot')).toBe('events-empty-state');
+    expect(screen.getByText('No events available right now')).toBeTruthy();
+    expect(
+      screen.getByText('Check back soon for upcoming events you can discover and book.'),
+    ).toBeTruthy();
+    expect(screen.queryByRole('list')).toBeNull();
   });
 
   it('renders event cards when public events load successfully', () => {
@@ -60,7 +88,8 @@ describe('EventsGrid', () => {
       data: MOCK_EVENTS,
       isLoading: false,
       isError: false,
-    } as ReturnType<typeof usePublicEventsQuery>);
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof usePublicEventsQuery>);
 
     render(<EventsGrid />);
 
