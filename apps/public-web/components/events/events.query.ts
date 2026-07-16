@@ -37,6 +37,30 @@ export type UpcomingEventViewModel = {
   startDatetime: string;
 };
 
+export type EventDetailTicketTypeViewModel = {
+  id: string;
+  name: string;
+  priceLabel: string;
+  remaining: number;
+  isAvailable: boolean;
+  benefits: string[] | null;
+  color: string | null;
+};
+
+export type EventDetailViewModel = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  venue: string;
+  imageUrl: string | null;
+  startDatetime: string;
+  endDatetime: string | null;
+  dateLabel: string;
+  priceLabel: string;
+  ticketTypes: EventDetailTicketTypeViewModel[];
+};
+
 export type PublicEventsQueryParams = {
   perPage?: number;
   sort?: string;
@@ -134,5 +158,65 @@ export function useUpcomingEventsQuery(
   return useQuery({
     queryKey: [...publicEventsQueryKey, 'upcoming', resolved] as const,
     queryFn: () => fetchUpcomingEvents(client, resolved),
+  });
+}
+
+const _PUBLIC_EVENT_DETAIL_PATH = '/api/public/events/{slug}' satisfies keyof PublicPaths;
+type PublicEventDetailItem = PublicComponents['schemas']['PublicEventDetailItem'];
+type PublicEventsShowResponse =
+  PublicPaths[typeof _PUBLIC_EVENT_DETAIL_PATH]['get']['responses'][200]['content']['application/json'];
+
+export function mapToEventDetailViewModel(item: PublicEventDetailItem): EventDetailViewModel {
+  const startDatetime = item.starts_at;
+  const endDatetime = item.ends_at ?? null;
+
+  const priceLabel =
+    item.starting_price?.amount != null && item.starting_price.currency
+      ? formatCurrency(Number(item.starting_price.amount), item.starting_price.currency)
+      : 'Free';
+
+  return {
+    id: String(item.id),
+    slug: item.slug,
+    title: item.title,
+    description: item.description ?? '',
+    venue: item.venue,
+    imageUrl: item.image_url ?? null,
+    startDatetime,
+    endDatetime,
+    dateLabel: formatDateTime(startDatetime),
+    priceLabel,
+    ticketTypes: item.ticket_types.map((ticketType) => ({
+      id: String(ticketType.id),
+      name: ticketType.name,
+      priceLabel: formatCurrency(Number(ticketType.price.amount), ticketType.price.currency),
+      remaining: ticketType.remaining,
+      isAvailable: ticketType.is_available,
+      benefits: ticketType.benefits ?? null,
+      color: ticketType.color ?? null,
+    })),
+  };
+}
+
+async function fetchPublicEventDetail(
+  client: ApiClient,
+  slug: string,
+): Promise<EventDetailViewModel> {
+  const response = await client.get<PublicEventsShowResponse>(`/api/public/events/${slug}`);
+
+  if (!response.data) {
+    throw new Error('Missing published event detail payload.');
+  }
+
+  return mapToEventDetailViewModel(response.data);
+}
+
+export function useEventDetailQuery(slug: string) {
+  const client = usePublicApiClient();
+
+  return useQuery({
+    queryKey: ['public', 'events', 'detail', slug] as const,
+    queryFn: () => fetchPublicEventDetail(client, slug),
+    enabled: slug.length > 0,
   });
 }

@@ -53,10 +53,13 @@ describe('EventCard', () => {
     expect(card.getAttribute('data-slug')).toBe('summer-jazz-night');
   });
 
-  it('does not render links or buttons', () => {
+  it('wraps the card with an event detail link', () => {
     render(<EventCard {...SAMPLE_EVENT} />);
 
-    expect(screen.queryByRole('link')).toBeNull();
+    const link = screen.getByRole('link', { name: 'View event: Summer Jazz Night' });
+    expect(link).toBeTruthy();
+    expect(link.getAttribute('href')).toBe('/events/summer-jazz-night');
+
     expect(screen.queryByRole('button')).toBeNull();
   });
 });

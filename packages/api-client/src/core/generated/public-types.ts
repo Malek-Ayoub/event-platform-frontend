@@ -229,6 +229,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/public/events/{slug}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Show a published event (public catalog)
+     * @description Public, unauthenticated detail for a single published event in the current venue context. Draft, cancelled, and completed events return 404. No Authorization header is required.
+     */
+    get: operations['public.events.show'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -926,6 +946,59 @@ export interface components {
       /** Format: date-time */
       updated_at?: string | null;
     };
+    /** @description Public catalog detail projection of a published event for anonymous visitors. */
+    PublicEventDetailItem: {
+      /**
+       * @description Projection of `App\Http\Resources\Events\PublicEventDetailResource`.
+       * @example 1
+       */
+      id: number;
+      /** @example summer-jazz-night */
+      slug: string;
+      /** @example Summer Jazz Night */
+      title: string;
+      /** @example A short teaser description for the catalog listing. */
+      description: string;
+      /** @example Harborview Pavilion */
+      venue: string;
+      /** Format: uri */
+      image_url?: string | null;
+      /**
+       * Format: date-time
+       * @example 2026-08-15T19:30:00Z
+       */
+      starts_at: string;
+      /**
+       * Format: date-time
+       * @example 2026-08-15T22:30:00Z
+       */
+      ends_at?: string | null;
+      starting_price?: {
+        /** @example 45.00 */
+        amount?: string;
+        /** @example USD */
+        currency?: string;
+      } | null;
+      ticket_types: {
+        /** @example 1 */
+        id: number;
+        /** @example General Admission */
+        name: string;
+        price: {
+          /** @example 45.00 */
+          amount: string;
+          /** @example USD */
+          currency: string;
+        };
+        /** @example 42 */
+        remaining: number;
+        /** @example true */
+        is_available: boolean;
+        benefits?: string[] | null;
+        /** @example #336699 */
+        color?: string | null;
+      }[];
+    };
     /** @description Public catalog projection of a published event for anonymous visitors. Intentionally separate from tenant EventResource. */
     PublicEventListItem: {
       /**
@@ -1542,6 +1615,39 @@ export interface operations {
             meta?: components['schemas']['PaginationMeta'];
             links?: components['schemas']['PaginationLinks'];
           };
+        };
+      };
+    };
+  };
+  'public.events.show': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        slug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Published event detail */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            data?: components['schemas']['PublicEventDetailItem'];
+          };
+        };
+      };
+      /** @description Not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
         };
       };
     };

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@event-platform/ui';
 import type { EventCardViewModel } from '@/components/events/events.query';
 
@@ -32,19 +33,21 @@ export function EventCard({
 }: EventCardProps) {
   return (
     <article data-event-id={id} data-slug={slug}>
-      <Card className="h-full overflow-hidden">
-        <EventCardImage title={title} imageUrl={imageUrl} />
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          <p className="text-sm text-muted-foreground">{venue}</p>
-          <time className="text-sm text-muted-foreground" dateTime={startDatetime}>
-            {dateLabel}
-          </time>
-          <p className="text-sm font-medium">{priceLabel}</p>
-        </CardContent>
-      </Card>
+      <Link href={`/events/${slug}`} className="block" aria-label={`View event: ${title}`}>
+        <Card className="h-full overflow-hidden">
+          <EventCardImage title={title} imageUrl={imageUrl} />
+          <CardHeader>
+            <CardTitle>{title}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <p className="text-sm text-muted-foreground">{venue}</p>
+            <time className="text-sm text-muted-foreground" dateTime={startDatetime}>
+              {dateLabel}
+            </time>
+            <p className="text-sm font-medium">{priceLabel}</p>
+          </CardContent>
+        </Card>
+      </Link>
     </article>
   );
 }
