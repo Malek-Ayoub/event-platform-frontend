@@ -2,12 +2,21 @@ import { createFallbackTenant, TenantProvider } from '@event-platform/tenant';
 import { PublicLayout } from '@event-platform/ui/layout';
 import { cleanup, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LandingPage } from './landing-page';
+
+vi.mock('@/components/events/events.query', () => ({
+  useUpcomingEventsQuery: () => ({
+    data: [],
+    isLoading: false,
+    isError: false,
+    refetch: vi.fn(),
+  }),
+}));
 
 const LANDING_SECTION_LABELS = [
   'Hero',
-  'Featured events',
+  'Upcoming events',
   'Venue highlights',
   'Call to action',
 ] as const;

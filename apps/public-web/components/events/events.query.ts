@@ -27,6 +27,21 @@ export type EventCardViewModel = {
   priceLabel: string;
 };
 
+/** Landing "Upcoming Events" shape — mirrors FeaturedEvent without importing landing types. */
+export type UpcomingEventViewModel = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  bannerUrl: string | null;
+  startDatetime: string;
+};
+
+export type PublicEventsQueryParams = {
+  perPage?: number;
+  sort?: string;
+};
+
 export const publicEventsQueryKey = ['public', 'events', 'index'] as const;
 
 export function mapToEventCardViewModel(item: PublicEventListItem): EventCardViewModel {
@@ -47,17 +62,77 @@ export function mapToEventCardViewModel(item: PublicEventListItem): EventCardVie
   };
 }
 
-async function fetchPublicEvents(client: ApiClient): Promise<EventCardViewModel[]> {
-  const response = await client.get<PublicEventsIndexResponse>(PUBLIC_EVENTS_INDEX_PATH);
-
-  return (response.data ?? []).map(mapToEventCardViewModel);
+export function mapToUpcomingEventViewModel(item: PublicEventListItem): UpcomingEventViewModel {
+  return {
+    id: String(item.id),
+    name: item.title,
+    slug: item.slug,
+    description: item.description ?? '',
+    bannerUrl: item.image_url ?? null,
+    startDatetime: item.starts_at,
+  };
 }
 
-export function usePublicEventsQuery() {
+function isUpcoming(startDatetime: string, nowMs: number): boolean {
+  return new Date(startDatetime).getTime() > nowMs;
+}
+
+async function fetchPublicEventItems(
+  client: ApiClient,
+  params: PublicEventsQueryParams = {},
+): Promise<PublicEventListItem[]> {
+  const response = await client.get<PublicEventsIndexResponse>(PUBLIC_EVENTS_INDEX_PATH, {
+    params: {
+      ...(params.perPage !== undefined ? { per_page: params.perPage } : {}),
+      ...(params.sort !== undefined ? { sort: params.sort } : {}),
+    },
+  });
+
+  return response.data ?? [];
+}
+
+async function fetchPublicEvents(
+  client: ApiClient,
+  params: PublicEventsQueryParams = {},
+): Promise<EventCardViewModel[]> {
+  const items = await fetchPublicEventItems(client, params);
+  return items.map(mapToEventCardViewModel);
+}
+
+async function fetchUpcomingEvents(
+  client: ApiClient,
+  params: PublicEventsQueryParams,
+): Promise<UpcomingEventViewModel[]> {
+  const items = await fetchPublicEventItems(client, params);
+  const nowMs = Date.now();
+
+  // Client-side future-only filter: API has no "starts_at > now" query yet.
+  // With per_page=4 this may return fewer than 4 cards after filtering past events.
+  return items
+    .map(mapToUpcomingEventViewModel)
+    .filter((event) => isUpcoming(event.startDatetime, nowMs));
+}
+
+export function usePublicEventsQuery(params: PublicEventsQueryParams = {}) {
   const client = usePublicApiClient();
 
   return useQuery({
-    queryKey: publicEventsQueryKey,
-    queryFn: () => fetchPublicEvents(client),
+    queryKey: [...publicEventsQueryKey, params] as const,
+    queryFn: () => fetchPublicEvents(client, params),
+  });
+}
+
+export function useUpcomingEventsQuery(
+  params: PublicEventsQueryParams = { perPage: 4, sort: 'starts_at' },
+) {
+  const client = usePublicApiClient();
+  const resolved = {
+    perPage: params.perPage ?? 4,
+    sort: params.sort ?? 'starts_at',
+  };
+
+  return useQuery({
+    queryKey: [...publicEventsQueryKey, 'upcoming', resolved] as const,
+    queryFn: () => fetchUpcomingEvents(client, resolved),
   });
 }

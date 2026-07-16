@@ -1,8 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@event-platform/ui';
-import { Container, Section } from '@event-platform/ui/layout';
+'use client';
+
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@event-platform/ui';
+import { Container, ErrorState, LoadingState, Section } from '@event-platform/ui/layout';
+import {
+  useUpcomingEventsQuery,
+  type UpcomingEventViewModel,
+} from '@/components/events/events.query';
 import { SectionEmptyState } from '@/components/landing/section-empty-state';
-import type { FeaturedEvent, LandingSectionProps } from '@/components/landing/types';
-import { getFeaturedEvents } from '@/lib/mock-data/featured-events';
+import type { LandingSectionProps } from '@/components/landing/types';
 
 function formatEventDate(isoDatetime: string): string {
   return new Intl.DateTimeFormat('en-US', {
@@ -11,7 +23,7 @@ function formatEventDate(isoDatetime: string): string {
   }).format(new Date(isoDatetime));
 }
 
-function FeaturedEventBanner({ event }: { event: FeaturedEvent }) {
+function FeaturedEventBanner({ event }: { event: UpcomingEventViewModel }) {
   if (event.bannerUrl) {
     return (
       <img
@@ -33,7 +45,7 @@ function FeaturedEventBanner({ event }: { event: FeaturedEvent }) {
   );
 }
 
-function FeaturedEventCard({ event }: { event: FeaturedEvent }) {
+function FeaturedEventCard({ event }: { event: UpcomingEventViewModel }) {
   const titleId = `featured-event-${event.id}-title`;
 
   return (
@@ -55,26 +67,44 @@ function FeaturedEventCard({ event }: { event: FeaturedEvent }) {
 }
 
 export function FeaturedEventsSection({ className }: LandingSectionProps) {
-  const events = getFeaturedEvents();
+  const { data: events, isLoading, isError, refetch } = useUpcomingEventsQuery();
 
   return (
-    <Section spacing="lg" variant="muted" aria-label="Featured events" className={className}>
+    <Section spacing="lg" variant="muted" aria-label="Upcoming events" className={className}>
       <Container>
         <div className="space-y-8" data-slot="featured-events-section-content">
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold tracking-tight">Featured events</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Upcoming Events</h2>
             <p className="max-w-2xl text-muted-foreground">
-              Discover upcoming events curated for you.
+              Discover what is coming up next on the calendar.
             </p>
           </div>
 
-          {events.length === 0 ? (
+          {isLoading ? (
+            <LoadingState title="Loading events" description="Fetching upcoming events." />
+          ) : null}
+
+          {isError ? (
+            <ErrorState
+              title="Unable to load events"
+              description="We could not load upcoming events right now. Please try again later."
+              action={
+                <Button type="button" onClick={() => void refetch()}>
+                  Retry
+                </Button>
+              }
+            />
+          ) : null}
+
+          {!isLoading && !isError && events && events.length === 0 ? (
             <SectionEmptyState
               sectionName="featured-events"
-              title="No featured events right now"
-              description="Check back soon for upcoming events you can discover and book."
+              title="No upcoming events right now"
+              description="Check back soon for events you can discover and book."
             />
-          ) : (
+          ) : null}
+
+          {!isLoading && !isError && events && events.length > 0 ? (
             <ul className="grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {events.map((event) => (
                 <li key={event.id}>
@@ -82,7 +112,7 @@ export function FeaturedEventsSection({ className }: LandingSectionProps) {
                 </li>
               ))}
             </ul>
-          )}
+          ) : null}
         </div>
       </Container>
     </Section>
