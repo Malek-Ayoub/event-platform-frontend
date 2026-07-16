@@ -3,6 +3,10 @@
 import type { ApiClient, PublicComponents, PublicPaths } from '@event-platform/api-client/core';
 import { usePublicApiClient } from '@event-platform/api-client/react';
 import { formatCurrency, formatDateTime } from '@event-platform/shared';
+// TODO(tech-debt): @tanstack/react-query مستورد مباشرة هنا لأن @event-platform/query
+// لا يُصدّر useQuery حاليًا. الحل الأنظف: تصدير useQuery من packages/query
+// وإزالة هذا الاعتماد المباشر من public-web، للحفاظ على عزل React Query
+// داخل packages/query حصريًا (راجع القاعدة المعمارية #7 في توثيق المشروع).
 import { useQuery } from '@tanstack/react-query';
 
 const PUBLIC_EVENTS_INDEX_PATH = '/api/public/events' satisfies keyof PublicPaths;
