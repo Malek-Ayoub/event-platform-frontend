@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
+import { APP_NAMES } from '@event-platform/shared';
+import { AppProviders } from '@/components/providers/app-providers';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Event Platform — Organizer',
+  title: APP_NAMES.organizer,
 };
 
 export default function RootLayout({
@@ -11,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

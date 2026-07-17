@@ -9,5 +9,9 @@ export type {
 } from './guards/index.js';
 export { hasAllPermissions, hasAnyPermission, hasPermission } from './permissions/index.js';
 export type { SessionStorageAdapter } from './session/index.js';
-export { MemorySessionStorage } from './session/index.js';
+export {
+  LocalStorageSessionStorage,
+  MemorySessionStorage,
+  ORGANIZER_SESSION_STORAGE_KEY,
+} from './session/index.js';
 export type { AccessToken, Permission, Role, Session, User } from './types/index.js';
