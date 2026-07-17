@@ -6,6 +6,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { EventCardViewModel } from '@/components/events/events.query';
 import { EventsPage } from './events-page';
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 const MOCK_EVENTS: EventCardViewModel[] = [
   {
     id: '1',
@@ -41,7 +46,17 @@ const MOCK_EVENTS: EventCardViewModel[] = [
 
 vi.mock('@/components/events/events.query', () => ({
   usePublicEventsQuery: () => ({
-    data: MOCK_EVENTS,
+    data: {
+      data: MOCK_EVENTS,
+      meta: {
+        current_page: 1,
+        last_page: 1,
+        per_page: 12,
+        total: 3,
+        from: 1,
+        to: 3,
+      },
+    },
     isLoading: false,
     isError: false,
   }),

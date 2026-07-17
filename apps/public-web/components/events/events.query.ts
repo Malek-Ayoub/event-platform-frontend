@@ -2,7 +2,7 @@
 
 import type { ApiClient, PublicComponents, PublicPaths } from '@event-platform/api-client/core';
 import { usePublicApiClient } from '@event-platform/api-client/react';
-import { formatCurrency, formatDateTime } from '@event-platform/shared';
+import { formatCurrency, formatDateTime, type PaginationMeta } from '@event-platform/shared';
 // TODO(tech-debt): @tanstack/react-query مستورد مباشرة هنا لأن @event-platform/query
 // لا يُصدّر useQuery حاليًا. الحل الأنظف: تصدير useQuery من packages/query
 // وإزالة هذا الاعتماد المباشر من public-web، للحفاظ على عزل React Query
@@ -62,11 +62,33 @@ export type EventDetailViewModel = {
 };
 
 export type PublicEventsQueryParams = {
+  page?: number;
   perPage?: number;
   sort?: string;
 };
 
+export type PublicEventsQueryResult = {
+  data: EventCardViewModel[];
+  meta: PaginationMeta;
+};
+
 export const publicEventsQueryKey = ['public', 'events', 'index'] as const;
+
+type PaginationMetaSchema = PublicComponents['schemas']['PaginationMeta'];
+
+function normalizePaginationMeta(
+  meta: PaginationMetaSchema | undefined,
+  page: number,
+): PaginationMeta {
+  return {
+    current_page: meta?.current_page ?? page,
+    last_page: meta?.last_page ?? 1,
+    per_page: meta?.per_page ?? 12,
+    total: meta?.total ?? 0,
+    from: meta?.from ?? null,
+    to: meta?.to ?? null,
+  };
+}
 
 export function mapToEventCardViewModel(item: PublicEventListItem): EventCardViewModel {
   const startDatetime = item.starts_at;
@@ -104,30 +126,40 @@ function isUpcoming(startDatetime: string, nowMs: number): boolean {
 async function fetchPublicEventItems(
   client: ApiClient,
   params: PublicEventsQueryParams = {},
-): Promise<PublicEventListItem[]> {
+): Promise<{ items: PublicEventListItem[]; meta: PaginationMeta }> {
+  const page = params.page ?? 1;
+
   const response = await client.get<PublicEventsIndexResponse>(PUBLIC_EVENTS_INDEX_PATH, {
     params: {
+      page,
       ...(params.perPage !== undefined ? { per_page: params.perPage } : {}),
       ...(params.sort !== undefined ? { sort: params.sort } : {}),
     },
   });
 
-  return response.data ?? [];
+  return {
+    items: response.data ?? [],
+    meta: normalizePaginationMeta(response.meta, page),
+  };
 }
 
 async function fetchPublicEvents(
   client: ApiClient,
   params: PublicEventsQueryParams = {},
-): Promise<EventCardViewModel[]> {
-  const items = await fetchPublicEventItems(client, params);
-  return items.map(mapToEventCardViewModel);
+): Promise<PublicEventsQueryResult> {
+  const { items, meta } = await fetchPublicEventItems(client, params);
+
+  return {
+    data: items.map(mapToEventCardViewModel),
+    meta,
+  };
 }
 
 async function fetchUpcomingEvents(
   client: ApiClient,
   params: PublicEventsQueryParams,
 ): Promise<UpcomingEventViewModel[]> {
-  const items = await fetchPublicEventItems(client, params);
+  const { items } = await fetchPublicEventItems(client, params);
   const nowMs = Date.now();
 
   // Client-side future-only filter: API has no "starts_at > now" query yet.
@@ -139,10 +171,15 @@ async function fetchUpcomingEvents(
 
 export function usePublicEventsQuery(params: PublicEventsQueryParams = {}) {
   const client = usePublicApiClient();
+  const resolved = {
+    page: params.page ?? 1,
+    ...(params.perPage !== undefined ? { perPage: params.perPage } : {}),
+    ...(params.sort !== undefined ? { sort: params.sort } : {}),
+  };
 
   return useQuery({
-    queryKey: [...publicEventsQueryKey, params] as const,
-    queryFn: () => fetchPublicEvents(client, params),
+    queryKey: [...publicEventsQueryKey, resolved] as const,
+    queryFn: () => fetchPublicEvents(client, resolved),
   });
 }
 
