@@ -1,5 +1,7 @@
 import { EventDetailPage } from '@/components/events/event-detail-page';
 
-export default function Page({ params }: { params: { slug: string } }) {
-  return <EventDetailPage slug={params.slug} />;
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  return <EventDetailPage slug={slug} />;
 }
