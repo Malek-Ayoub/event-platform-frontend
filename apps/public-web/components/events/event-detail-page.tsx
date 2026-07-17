@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@event-platform/ui';
 import {
   Container,
@@ -10,14 +11,18 @@ import {
   Section,
 } from '@event-platform/ui/layout';
 import { ApiError } from '@event-platform/api-client/core';
-import { formatDateTime } from '@event-platform/shared';
+import { formatCurrency, formatDateTime } from '@event-platform/shared';
 import { useEventDetailQuery } from '@/components/events/events.query';
 import type { EventDetailViewModel } from '@/components/events/events.query';
 
 function TicketTypeCard({
   ticketType,
+  quantity,
+  onQuantityChange,
 }: {
   ticketType: EventDetailViewModel['ticketTypes'][number];
+  quantity: number;
+  onQuantityChange: (next: number) => void;
 }) {
   const badgeText =
     !ticketType.isAvailable && ticketType.remaining <= 0 ? 'Sold out' : 'Not available';
@@ -46,11 +51,43 @@ function TicketTypeCard({
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-3">
               <p className="text-sm font-medium">{ticketType.priceLabel}</p>
 
               {ticketType.isAvailable ? (
-                <p className="text-sm text-muted-foreground">Remaining: {ticketType.remaining}</p>
+                <>
+                  <p className="text-sm text-muted-foreground">Remaining: {ticketType.remaining}</p>
+
+                  <div className="flex items-center gap-3" data-slot="ticket-quantity-stepper">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      aria-label={`Decrease ${ticketType.name} quantity`}
+                      disabled={quantity <= 0}
+                      onClick={() => onQuantityChange(Math.max(0, quantity - 1))}
+                    >
+                      −
+                    </Button>
+                    <span
+                      className="min-w-8 text-center text-sm font-medium"
+                      aria-live="polite"
+                      aria-label={`${ticketType.name} quantity`}
+                    >
+                      {quantity}
+                    </span>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      aria-label={`Increase ${ticketType.name} quantity`}
+                      disabled={quantity >= ticketType.remaining}
+                      onClick={() => onQuantityChange(Math.min(ticketType.remaining, quantity + 1))}
+                    >
+                      +
+                    </Button>
+                  </div>
+                </>
               ) : null}
 
               {ticketType.benefits && ticketType.benefits.length > 0 ? (
@@ -68,8 +105,46 @@ function TicketTypeCard({
   );
 }
 
+function buildCheckoutItemsParam(quantities: Record<string, number>): string {
+  return Object.entries(quantities)
+    .filter(([, qty]) => qty > 0)
+    .map(([ticketTypeId, qty]) => `${ticketTypeId}:${qty}`)
+    .join(',');
+}
+
 export function EventDetailPage({ slug }: { slug: string }) {
   const { data: event, isLoading, isError, error, refetch } = useEventDetailQuery(slug);
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  const selectedTotal = useMemo(() => {
+    if (!event) {
+      return { ticketCount: 0, amount: 0, currency: 'USD', label: formatCurrency(0) };
+    }
+
+    let ticketCount = 0;
+    let amount = 0;
+    let currency = event.ticketTypes[0]?.currency ?? 'USD';
+
+    for (const ticketType of event.ticketTypes) {
+      const qty = quantities[ticketType.id] ?? 0;
+      if (qty <= 0) continue;
+      ticketCount += qty;
+      amount += ticketType.priceAmount * qty;
+      currency = ticketType.currency;
+    }
+
+    return {
+      ticketCount,
+      amount,
+      currency,
+      label: formatCurrency(amount, currency),
+    };
+  }, [event, quantities]);
+
+  const checkoutHref = useMemo(() => {
+    const items = buildCheckoutItemsParam(quantities);
+    return `/events/${slug}/checkout?items=${items}`;
+  }, [quantities, slug]);
 
   return (
     <Section spacing="lg" variant="muted" aria-label="Event detail">
@@ -134,9 +209,41 @@ export function EventDetailPage({ slug }: { slug: string }) {
 
               <ul className="grid list-none gap-4 md:grid-cols-2">
                 {event.ticketTypes.map((ticketType) => (
-                  <TicketTypeCard key={ticketType.id} ticketType={ticketType} />
+                  <TicketTypeCard
+                    key={ticketType.id}
+                    ticketType={ticketType}
+                    quantity={quantities[ticketType.id] ?? 0}
+                    onQuantityChange={(next) =>
+                      setQuantities((prev) => ({ ...prev, [ticketType.id]: next }))
+                    }
+                  />
                 ))}
               </ul>
+
+              <div
+                className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between"
+                data-slot="ticket-selection-summary"
+              >
+                <div className="space-y-1 text-sm">
+                  <p>
+                    Selected tickets:{' '}
+                    <span className="font-medium">{selectedTotal.ticketCount}</span>
+                  </p>
+                  <p>
+                    Total: <span className="font-medium">{selectedTotal.label}</span>
+                  </p>
+                </div>
+
+                {selectedTotal.ticketCount > 0 ? (
+                  <Button asChild>
+                    <Link href={checkoutHref}>Continue to checkout</Link>
+                  </Button>
+                ) : (
+                  <Button type="button" disabled>
+                    Continue to checkout
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         ) : null}

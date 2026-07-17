@@ -701,6 +701,41 @@ export interface components {
         quantity: number;
       }[];
     };
+    /**
+     * @description Guest checkout payload. customer_user_id and reservation_id are not accepted.
+     * @example {
+     *       "event_id": 1,
+     *       "customer_name": "Jane Doe",
+     *       "customer_email": "jane@example.com",
+     *       "line_items": [
+     *         {
+     *           "ticket_type_id": 1,
+     *           "quantity": 2
+     *         }
+     *       ]
+     *     }
+     */
+    CreatePublicOrderRequest: {
+      /**
+       * @description Must reference a published event in the current venue.
+       * @example 1
+       */
+      event_id: number;
+      /** @example Jane Doe */
+      customer_name: string;
+      /**
+       * Format: email
+       * @example jane@example.com
+       */
+      customer_email: string;
+      customer_phone?: string | null;
+      line_items: {
+        /** @example 1 */
+        ticket_type_id: number;
+        /** @example 2 */
+        quantity: number;
+      }[];
+    };
     InitiatePaymentRequest: {
       /**
        * @description Projection of `App\Http\Requests\Payments\InitiatePaymentRequest`.
@@ -755,6 +790,13 @@ export interface components {
       /** Format: password */
       password_confirmation: string;
       phone?: string | null;
+    };
+    SubmitPublicPaymentVerificationRequest: {
+      /**
+       * @description Wallet provider transfer reference submitted by the guest.
+       * @example TX-1001
+       */
+      transaction_number: string;
     };
     VerifyPaymentRequest: {
       /**
@@ -1361,6 +1403,55 @@ export interface components {
         /** @example USD */
         currency?: string;
       } | null;
+    };
+    /** @description Limited public projection of a guest-created order. Internal financial fields are omitted. */
+    PublicOrderResource: {
+      /**
+       * @description Projection of `App\Http\Resources\Orders\PublicOrderResource`.
+       * @example 1
+       */
+      id: number;
+      /** @example ORD-ABC12345 */
+      order_number: string;
+      /** @example pending */
+      status: string;
+      /** @example 150.00 */
+      total: string;
+      /** @example Jane Doe */
+      customer_name: string;
+      /**
+       * Format: email
+       * @example jane@example.com
+       */
+      customer_email: string;
+    };
+    /** @description Guest-facing payment instructions. Numeric payment and account ids are intentionally omitted. */
+    PublicPaymentInstructionResource: {
+      /**
+       * @description Wallet brand label for the guest.
+       * @example shamcash
+       */
+      provider: string;
+      /** @example WALLET-001 */
+      merchant_account: string;
+      /** @example 120.00 */
+      amount: string;
+      /** @example USD */
+      currency: string;
+      /** Format: date-time */
+      expires_at: string;
+      instructions: string;
+    };
+    /** @description Guest-facing verification outcome. Internal payment fields are omitted. */
+    PublicPaymentVerificationResource: {
+      /**
+       * @description Projection of `App\Http\Resources\Payments\PublicPaymentVerificationResource`.
+       * @example paid
+       * @enum {string}
+       */
+      status: 'paid' | 'failed' | 'verifying' | 'awaiting_transfer' | 'expired';
+      /** @example Payment confirmed. */
+      message: string;
     };
     SettlementSummary: {
       /** @example 125000.00 */

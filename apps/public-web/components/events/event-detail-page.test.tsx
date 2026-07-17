@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@event-platform/api-client/core';
 import { EventDetailPage } from './event-detail-page';
@@ -24,8 +24,10 @@ const MOCK_EVENT: EventDetailViewModel = {
     {
       id: '10',
       name: 'General Admission',
+      priceAmount: 45,
+      currency: 'USD',
       priceLabel: '$45.00',
-      remaining: 90,
+      remaining: 3,
       isAvailable: true,
       benefits: ['Early entry'],
       color: '#336699',
@@ -33,6 +35,8 @@ const MOCK_EVENT: EventDetailViewModel = {
     {
       id: '11',
       name: 'VIP',
+      priceAmount: 75,
+      currency: 'USD',
       priceLabel: '$75.00',
       remaining: 10,
       isAvailable: false,
@@ -95,7 +99,7 @@ describe('EventDetailPage', () => {
 
     expect(screen.getByText('Unable to load event')).toBeTruthy();
     const retryButton = screen.getByRole('button', { name: 'Retry' });
-    retryButton.click();
+    fireEvent.click(retryButton);
     expect(refetch).toHaveBeenCalledTimes(1);
   });
 
@@ -106,6 +110,8 @@ describe('EventDetailPage', () => {
         {
           id: '11',
           name: 'VIP',
+          priceAmount: 75,
+          currency: 'USD',
           priceLabel: '$75.00',
           remaining: 10,
           isAvailable: false,
@@ -127,7 +133,48 @@ describe('EventDetailPage', () => {
 
     expect(screen.getByRole('heading', { level: 3, name: 'VIP' })).toBeTruthy();
     expect(screen.getByText('Not available')).toBeTruthy();
-    // For unavailable ticket types we should not render remaining counts.
     expect(screen.queryByText(/Remaining:/i)).toBeNull();
+    expect(screen.queryByLabelText(/Increase VIP quantity/i)).toBeNull();
+  });
+
+  it('increments and decrements quantity within remaining bounds', () => {
+    vi.mocked(useEventDetailQuery).mockReturnValue({
+      data: MOCK_EVENT,
+      isLoading: false,
+      isError: false,
+      error: null,
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof useEventDetailQuery>);
+
+    render(<EventDetailPage slug="summer-jazz-night" />);
+
+    const decrease = screen.getByRole('button', {
+      name: 'Decrease General Admission quantity',
+    }) as HTMLButtonElement;
+    const increase = screen.getByRole('button', {
+      name: 'Increase General Admission quantity',
+    }) as HTMLButtonElement;
+    const checkout = screen.getByRole('button', { name: 'Continue to checkout' });
+
+    expect(decrease.disabled).toBe(true);
+    expect((checkout as HTMLButtonElement).disabled).toBe(true);
+
+    fireEvent.click(increase);
+    fireEvent.click(increase);
+    expect(screen.getByLabelText('General Admission quantity').textContent).toBe('2');
+    expect(decrease.disabled).toBe(false);
+
+    fireEvent.click(increase);
+    expect(screen.getByLabelText('General Admission quantity').textContent).toBe('3');
+    expect(increase.disabled).toBe(true);
+
+    const link = screen.getByRole('link', { name: 'Continue to checkout' });
+    expect(link.getAttribute('href')).toBe('/events/summer-jazz-night/checkout?items=10:3');
+
+    fireEvent.click(decrease);
+    expect(screen.getByLabelText('General Admission quantity').textContent).toBe('2');
+    expect(screen.getByRole('link', { name: 'Continue to checkout' }).getAttribute('href')).toBe(
+      '/events/summer-jazz-night/checkout?items=10:2',
+    );
   });
 });

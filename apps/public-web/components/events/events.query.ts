@@ -40,6 +40,8 @@ export type UpcomingEventViewModel = {
 export type EventDetailTicketTypeViewModel = {
   id: string;
   name: string;
+  priceAmount: number;
+  currency: string;
   priceLabel: string;
   remaining: number;
   isAvailable: boolean;
@@ -223,15 +225,22 @@ export function mapToEventDetailViewModel(item: PublicEventDetailItem): EventDet
     endDatetime,
     dateLabel: formatDateTime(startDatetime),
     priceLabel,
-    ticketTypes: item.ticket_types.map((ticketType) => ({
-      id: String(ticketType.id),
-      name: ticketType.name,
-      priceLabel: formatCurrency(Number(ticketType.price.amount), ticketType.price.currency),
-      remaining: ticketType.remaining,
-      isAvailable: ticketType.is_available,
-      benefits: ticketType.benefits ?? null,
-      color: ticketType.color ?? null,
-    })),
+    ticketTypes: item.ticket_types.map((ticketType) => {
+      const priceAmount = Number(ticketType.price.amount);
+      const currency = ticketType.price.currency;
+
+      return {
+        id: String(ticketType.id),
+        name: ticketType.name,
+        priceAmount,
+        currency,
+        priceLabel: formatCurrency(priceAmount, currency),
+        remaining: ticketType.remaining,
+        isAvailable: ticketType.is_available,
+        benefits: ticketType.benefits ?? null,
+        color: ticketType.color ?? null,
+      };
+    }),
   };
 }
 

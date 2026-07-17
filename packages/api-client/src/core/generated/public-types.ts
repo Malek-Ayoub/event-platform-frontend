@@ -249,6 +249,66 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/public/orders': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create a guest order (public checkout)
+     * @description Public, unauthenticated order creation for a published event in the current venue context. Guests cannot set customer_user_id or reservation_id. Rate limited to 10 requests per minute per IP. No Authorization header is required.
+     */
+    post: operations['public.orders.store'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/public/orders/{orderNumber}/payment-instructions': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create guest payment instructions
+     * @description Public, unauthenticated payment instructions for a pending order identified by order_number. Rate limited to 10 requests per minute per IP. No Authorization header is required. Does not expose numeric payment ids.
+     */
+    post: operations['public.orders.payment-instructions'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/public/orders/{orderNumber}/payment-verification': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Verify guest payment by transaction number
+     * @description Public, unauthenticated verification of a wallet transfer for a pending order. Looks up the latest awaiting_transfer/verifying payment internally — payment ids are never accepted from the client. Rate limited to 10 requests per minute per IP.
+     */
+    post: operations['public.orders.payment-verification'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -370,6 +430,41 @@ export interface components {
         quantity: number;
       }[];
     };
+    /**
+     * @description Guest checkout payload. customer_user_id and reservation_id are not accepted.
+     * @example {
+     *       "event_id": 1,
+     *       "customer_name": "Jane Doe",
+     *       "customer_email": "jane@example.com",
+     *       "line_items": [
+     *         {
+     *           "ticket_type_id": 1,
+     *           "quantity": 2
+     *         }
+     *       ]
+     *     }
+     */
+    CreatePublicOrderRequest: {
+      /**
+       * @description Must reference a published event in the current venue.
+       * @example 1
+       */
+      event_id: number;
+      /** @example Jane Doe */
+      customer_name: string;
+      /**
+       * Format: email
+       * @example jane@example.com
+       */
+      customer_email: string;
+      customer_phone?: string | null;
+      line_items: {
+        /** @example 1 */
+        ticket_type_id: number;
+        /** @example 2 */
+        quantity: number;
+      }[];
+    };
     InitiatePaymentRequest: {
       /**
        * @description Projection of `App\Http\Requests\Payments\InitiatePaymentRequest`.
@@ -424,6 +519,13 @@ export interface components {
       /** Format: password */
       password_confirmation: string;
       phone?: string | null;
+    };
+    SubmitPublicPaymentVerificationRequest: {
+      /**
+       * @description Wallet provider transfer reference submitted by the guest.
+       * @example TX-1001
+       */
+      transaction_number: string;
     };
     VerifyPaymentRequest: {
       /**
@@ -1030,6 +1132,55 @@ export interface components {
         /** @example USD */
         currency?: string;
       } | null;
+    };
+    /** @description Limited public projection of a guest-created order. Internal financial fields are omitted. */
+    PublicOrderResource: {
+      /**
+       * @description Projection of `App\Http\Resources\Orders\PublicOrderResource`.
+       * @example 1
+       */
+      id: number;
+      /** @example ORD-ABC12345 */
+      order_number: string;
+      /** @example pending */
+      status: string;
+      /** @example 150.00 */
+      total: string;
+      /** @example Jane Doe */
+      customer_name: string;
+      /**
+       * Format: email
+       * @example jane@example.com
+       */
+      customer_email: string;
+    };
+    /** @description Guest-facing payment instructions. Numeric payment and account ids are intentionally omitted. */
+    PublicPaymentInstructionResource: {
+      /**
+       * @description Wallet brand label for the guest.
+       * @example shamcash
+       */
+      provider: string;
+      /** @example WALLET-001 */
+      merchant_account: string;
+      /** @example 120.00 */
+      amount: string;
+      /** @example USD */
+      currency: string;
+      /** Format: date-time */
+      expires_at: string;
+      instructions: string;
+    };
+    /** @description Guest-facing verification outcome. Internal payment fields are omitted. */
+    PublicPaymentVerificationResource: {
+      /**
+       * @description Projection of `App\Http\Resources\Payments\PublicPaymentVerificationResource`.
+       * @example paid
+       * @enum {string}
+       */
+      status: 'paid' | 'failed' | 'verifying' | 'awaiting_transfer' | 'expired';
+      /** @example Payment confirmed. */
+      message: string;
     };
     SettlementSummary: {
       /** @example 125000.00 */
@@ -1643,6 +1794,156 @@ export interface operations {
       };
       /** @description Not found */
       404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  'public.orders.store': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreatePublicOrderRequest'];
+      };
+    };
+    responses: {
+      /** @description Guest order created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            data?: components['schemas']['PublicOrderResource'];
+          };
+        };
+      };
+      /** @description Validation or business rule error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValidationErrorResponse'];
+        };
+      };
+      /** @description Too many requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  'public.orders.payment-instructions': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        orderNumber: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Payment instructions created or reused (idempotent) */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            data?: components['schemas']['PublicPaymentInstructionResource'];
+          };
+        };
+      };
+      /** @description Order not found, not pending, or not in this venue */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Validation or business rule error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValidationErrorResponse'];
+        };
+      };
+      /** @description Too many requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+    };
+  };
+  'public.orders.payment-verification': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        orderNumber: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SubmitPublicPaymentVerificationRequest'];
+      };
+    };
+    responses: {
+      /** @description Verification result */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': {
+            data?: components['schemas']['PublicPaymentVerificationResource'];
+          };
+        };
+      };
+      /** @description Order or active payment instruction not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ErrorResponse'];
+        };
+      };
+      /** @description Validation or business rule error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValidationErrorResponse'];
+        };
+      };
+      /** @description Too many requests */
+      429: {
         headers: {
           [name: string]: unknown;
         };
