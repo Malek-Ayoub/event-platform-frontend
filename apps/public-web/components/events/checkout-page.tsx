@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -21,7 +22,6 @@ import type { EventDetailTicketTypeViewModel } from '@/components/events/events.
 import {
   useCreatePublicOrderMutation,
   type CreatePublicOrderRequest,
-  type PublicOrderResource,
 } from '@/components/events/orders.query';
 
 type CheckoutLineItem = {
@@ -113,9 +113,9 @@ function formatOrderErrorMessage(error: ApiError): string {
 }
 
 export function CheckoutPage({ slug, rawItems }: { slug: string; rawItems: string | undefined }) {
+  const router = useRouter();
   const { data: event, isLoading, isError, error, refetch } = useEventDetailQuery(slug);
   const createOrder = useCreatePublicOrderMutation();
-  const [placedOrder, setPlacedOrder] = useState<PublicOrderResource | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [fatalError, setFatalError] = useState<'404' | 'generic' | null>(null);
   const [lastPayload, setLastPayload] = useState<CreatePublicOrderRequest | null>(null);
@@ -155,7 +155,7 @@ export function CheckoutPage({ slug, rawItems }: { slug: string; rawItems: strin
 
     try {
       const order = await createOrder.mutateAsync(payload);
-      setPlacedOrder(order);
+      router.push(`/checkout/${order.order_number}`);
     } catch (submitError) {
       if (submitError instanceof ApiError) {
         if (submitError.status === 422) {
@@ -236,23 +236,7 @@ export function CheckoutPage({ slug, rawItems }: { slug: string; rawItems: strin
           />
         ) : null}
 
-        {!isLoading && !isError && event && lineItems && placedOrder ? (
-          <div className="space-y-3" data-slot="order-confirmation">
-            <h1 className="text-3xl font-semibold tracking-tight">Order placed</h1>
-            <p className="text-sm">
-              Order Number: <span className="font-medium">{placedOrder.order_number}</span>
-            </p>
-            <p className="text-sm text-muted-foreground">Status: {placedOrder.status}</p>
-            <p className="text-sm">
-              Total:{' '}
-              <span className="font-medium">
-                {formatCurrency(Number(placedOrder.total), orderTotal.currency)}
-              </span>
-            </p>
-          </div>
-        ) : null}
-
-        {!isLoading && !isError && event && lineItems && !placedOrder && fatalError === '404' ? (
+        {!isLoading && !isError && event && lineItems && fatalError === '404' ? (
           <ErrorState
             title="Event not found"
             description="This event is no longer published."
@@ -264,12 +248,7 @@ export function CheckoutPage({ slug, rawItems }: { slug: string; rawItems: strin
           />
         ) : null}
 
-        {!isLoading &&
-        !isError &&
-        event &&
-        lineItems &&
-        !placedOrder &&
-        fatalError === 'generic' ? (
+        {!isLoading && !isError && event && lineItems && fatalError === 'generic' ? (
           <ErrorState
             title="Unable to place order"
             description="Something went wrong while creating your order. Please try again."
@@ -289,7 +268,7 @@ export function CheckoutPage({ slug, rawItems }: { slug: string; rawItems: strin
           />
         ) : null}
 
-        {!isLoading && !isError && event && lineItems && !placedOrder && fatalError === null ? (
+        {!isLoading && !isError && event && lineItems && fatalError === null ? (
           <div className="space-y-8">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">Checkout</h1>

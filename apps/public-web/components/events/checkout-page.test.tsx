@@ -6,6 +6,12 @@ import type { EventDetailViewModel } from '@/components/events/events.query';
 import { useEventDetailQuery } from '@/components/events/events.query';
 import { useCreatePublicOrderMutation } from '@/components/events/orders.query';
 
+const mockPush = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 vi.mock('@/components/events/events.query', () => ({
   useEventDetailQuery: vi.fn(),
 }));
@@ -113,7 +119,7 @@ describe('CheckoutPage', () => {
     expect(screen.getByText('Your selection is no longer valid')).toBeTruthy();
   });
 
-  it('shows confirmation with order_number after successful submit', async () => {
+  it('redirects to the payment page after successful submit', async () => {
     mockDetailSuccess();
     const mutateAsync = mockMutation({
       mutateAsync: vi.fn().mockResolvedValue({
@@ -143,10 +149,10 @@ describe('CheckoutPage', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Order placed')).toBeTruthy();
-      expect(screen.getByText('ORD-ABC12345')).toBeTruthy();
-      expect(screen.getByText(/Status:\s*pending/i)).toBeTruthy();
+      expect(mockPush).toHaveBeenCalledWith('/checkout/ORD-ABC12345');
     });
+
+    expect(screen.queryByText('Order placed')).toBeNull();
   });
 
   it('shows retryable 422 validation message above the form', async () => {
