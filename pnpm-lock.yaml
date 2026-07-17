@@ -248,12 +248,36 @@ importers:
 
   apps/scanner:
     dependencies:
+      '@event-platform/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@event-platform/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@event-platform/query':
+        specifier: workspace:*
+        version: link:../../packages/query
+      '@event-platform/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@event-platform/tenant':
+        specifier: workspace:*
+        version: link:../../packages/tenant
+      '@event-platform/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@tanstack/react-query':
+        specifier: ^5.64.1
+        version: 5.101.2(react@19.2.7)
       react:
         specifier: ^19.0.0
         version: 19.2.7
       react-dom:
         specifier: ^19.0.0
         version: 19.2.7(react@19.2.7)
+      react-hook-form:
+        specifier: ^7.54.2
+        version: 7.81.0(react@19.2.7)
       react-router-dom:
         specifier: ^7.1.1
         version: 7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -261,6 +285,9 @@ importers:
       '@event-platform/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@testing-library/react':
+        specifier: ^16.1.0
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@types/react':
         specifier: ^19.0.7
         version: 19.2.17
@@ -270,9 +297,21 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3(@types/node@22.20.1)(jiti@1.21.7)(terser@5.49.0)(yaml@2.9.0))
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.2(postcss@8.5.19)
       eslint:
         specifier: ^9.17.0
         version: 9.39.5(jiti@1.21.7)
+      jsdom:
+        specifier: ^25.0.1
+        version: 25.0.1
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.19
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.19(yaml@2.9.0)
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
@@ -282,6 +321,9 @@ importers:
       vite-plugin-pwa:
         specifier: ^0.21.1
         version: 0.21.2(vite@6.4.3(@types/node@22.20.1)(jiti@1.21.7)(terser@5.49.0)(yaml@2.9.0))(workbox-build@7.4.1(@types/babel__core@7.20.5))(workbox-window@7.4.1)
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.7(@types/node@22.20.1)(jiti@1.21.7)(jsdom@25.0.1)(terser@5.49.0)(yaml@2.9.0)
 
   packages/api-client:
     dependencies:
