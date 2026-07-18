@@ -1,12 +1,8 @@
-const ENV_KEYS = ['NEXT_PUBLIC_TENANT_SLUG', 'VITE_TENANT_SLUG', 'TENANT_SLUG'] as const;
-
-function readProcessEnv(key: string): string | undefined {
-  if (typeof process === 'undefined') {
-    return undefined;
-  }
-
-  return process.env[key]?.trim() || undefined;
-}
+/**
+ * Next.js only inlines `process.env.NEXT_PUBLIC_*` when the key is a static
+ * string literal. Dynamic `process.env[key]` access always returns undefined
+ * in the browser bundle — do not use it for NEXT_PUBLIC_* reads.
+ */
 
 function readImportMetaEnv(key: string): string | undefined {
   try {
@@ -22,16 +18,21 @@ function readImportMetaEnv(key: string): string | undefined {
  * Read tenant slug override from supported environment variables.
  */
 export function readTenantSlugFromEnv(): string | null {
-  for (const key of ENV_KEYS) {
-    const fromProcess = readProcessEnv(key);
-    if (fromProcess) {
-      return fromProcess;
+  if (typeof process !== 'undefined') {
+    const fromNext = process.env.NEXT_PUBLIC_TENANT_SLUG?.trim();
+    if (fromNext) {
+      return fromNext;
     }
 
-    const fromImportMeta = readImportMetaEnv(key);
-    if (fromImportMeta) {
-      return fromImportMeta;
+    const fromNode = process.env.TENANT_SLUG?.trim();
+    if (fromNode) {
+      return fromNode;
     }
+  }
+
+  const fromVite = readImportMetaEnv('VITE_TENANT_SLUG');
+  if (fromVite) {
+    return fromVite;
   }
 
   return null;
@@ -41,22 +42,21 @@ export function readTenantSlugFromEnv(): string | null {
  * Read base domain override for local development.
  */
 export function readBaseDomainFromEnv(): string | null {
-  const keys = [
-    'NEXT_PUBLIC_TENANCY_BASE_DOMAIN',
-    'VITE_TENANCY_BASE_DOMAIN',
-    'TENANCY_BASE_DOMAIN',
-  ] as const;
-
-  for (const key of keys) {
-    const fromProcess = readProcessEnv(key);
-    if (fromProcess) {
-      return fromProcess;
+  if (typeof process !== 'undefined') {
+    const fromNext = process.env.NEXT_PUBLIC_TENANCY_BASE_DOMAIN?.trim();
+    if (fromNext) {
+      return fromNext;
     }
 
-    const fromImportMeta = readImportMetaEnv(key);
-    if (fromImportMeta) {
-      return fromImportMeta;
+    const fromNode = process.env.TENANCY_BASE_DOMAIN?.trim();
+    if (fromNode) {
+      return fromNode;
     }
+  }
+
+  const fromVite = readImportMetaEnv('VITE_TENANCY_BASE_DOMAIN');
+  if (fromVite) {
+    return fromVite;
   }
 
   return null;
