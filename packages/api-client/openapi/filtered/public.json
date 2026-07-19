@@ -1476,6 +1476,22 @@
         },
         "type": "object"
       },
+      "UpdateVenueRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Harbor Hall",
+            "maxLength": 255
+          },
+          "commission_rate": {
+            "type": "number",
+            "example": 2.5,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        "type": "object"
+      },
       "VerifyPaymentRequest": {
         "required": [
           "transaction_number"

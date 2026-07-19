@@ -542,6 +542,12 @@ export interface components {
              */
             transaction_number: string;
         };
+        UpdateVenueRequest: {
+            /** @example Harbor Hall */
+            name?: string;
+            /** @example 2.5 */
+            commission_rate?: number;
+        };
         VerifyPaymentRequest: {
             /**
              * @description Projection of `App\Http\Requests\Payments\VerifyPaymentRequest`.

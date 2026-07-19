@@ -255,6 +255,9 @@ export function DashboardPage() {
             ) : null}
           </div>
           <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" variant="outline" onClick={() => router.push('/venues')}>
+              Venues
+            </Button>
             <Button type="button" variant="outline" onClick={() => router.push('/venues/new')}>
               Create venue
             </Button>
