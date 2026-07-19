@@ -736,6 +736,21 @@ export interface components {
                 quantity: number;
             }[];
         };
+        CreateVenueRequest: {
+            /** @example Harbor Hall */
+            name: string;
+            /** @example harbor-hall */
+            subdomain: string;
+            /** @example Sam Organizer */
+            owner_name: string;
+            /**
+             * Format: email
+             * @example owner@harbor.test
+             */
+            owner_email: string;
+            /** Format: password */
+            owner_password: string;
+        };
         InitiatePaymentRequest: {
             /**
              * @description Projection of `App\Http\Requests\Payments\InitiatePaymentRequest`.
@@ -1527,6 +1542,23 @@ export interface components {
             created_at?: string | null;
             /** Format: date-time */
             updated_at?: string | null;
+        };
+        VenueResource: {
+            id?: number;
+            name?: string;
+            slug?: string;
+            subdomain?: string;
+            /** @enum {string} */
+            status?: "active" | "suspended" | "pending";
+            /** @example 1.00 */
+            commission_rate?: string;
+            owner?: {
+                name?: string;
+                /** Format: email */
+                email?: string;
+            };
+            /** Format: date-time */
+            created_at?: string;
         };
     };
     responses: never;

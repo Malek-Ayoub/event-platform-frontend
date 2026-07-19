@@ -254,9 +254,14 @@ export function DashboardPage() {
               </div>
             ) : null}
           </div>
-          <Button type="button" variant="outline" onClick={() => void handleLogout()}>
-            Logout
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" variant="outline" onClick={() => router.push('/venues/new')}>
+              Create venue
+            </Button>
+            <Button type="button" variant="outline" onClick={() => void handleLogout()}>
+              Logout
+            </Button>
+          </div>
         </div>
 
         {isLoading ? (

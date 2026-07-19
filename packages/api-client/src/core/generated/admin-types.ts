@@ -95,6 +95,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/venues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a venue and its owner account */
+        post: operations["admin.venues.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -250,6 +267,21 @@ export interface components {
                 /** @example 2 */
                 quantity: number;
             }[];
+        };
+        CreateVenueRequest: {
+            /** @example Harbor Hall */
+            name: string;
+            /** @example harbor-hall */
+            subdomain: string;
+            /** @example Sam Organizer */
+            owner_name: string;
+            /**
+             * Format: email
+             * @example owner@harbor.test
+             */
+            owner_email: string;
+            /** Format: password */
+            owner_password: string;
         };
         InitiatePaymentRequest: {
             /**
@@ -1043,6 +1075,23 @@ export interface components {
             /** Format: date-time */
             updated_at?: string | null;
         };
+        VenueResource: {
+            id?: number;
+            name?: string;
+            slug?: string;
+            subdomain?: string;
+            /** @enum {string} */
+            status?: "active" | "suspended" | "pending";
+            /** @example 1.00 */
+            commission_rate?: string;
+            owner?: {
+                name?: string;
+                /** Format: email */
+                email?: string;
+            };
+            /** Format: date-time */
+            created_at?: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -1486,6 +1535,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "admin.venues.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateVenueRequest"];
+            };
+        };
+        responses: {
+            /** @description Venue created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["VenueResource"];
+                    };
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
                 };
             };
         };
