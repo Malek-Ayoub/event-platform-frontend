@@ -1,0 +1,2976 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Event Platform API",
+    "description": "Multi-tenant event platform API.\n\n- **Global routes** (`/api/...`) — authentication and platform (super admin) endpoints.\n- **Tenant routes** (`/api/tenant/...`) — resolved via the venue subdomain; every endpoint\n  below this prefix is scoped to the authenticated user's venue.\n\nAll mutating endpoints follow the `FormRequest → DTO → Service → ApiResource → ApiResponse`\npipeline. **OpenAPI schemas in `app/OpenApi/` are a read-only projection** of that contract —\nFormRequest + ApiResource + DTO remain the source of truth; update both in the same commit.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "Global platform API"
+    },
+    {
+      "url": "/api/tenant",
+      "description": "Tenant-scoped API (requires venue subdomain resolution)"
+    }
+  ],
+  "paths": {
+    "/api/admin/commission-payments": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Record commission received from an organizer",
+        "operationId": "admin.commission-payments.store",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordCommissionPaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Commission payment recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/CommissionPaymentResource"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sanctum": []
+          }
+        ]
+      }
+    },
+    "/api/admin/dashboard": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Admin dashboard overview",
+        "description": "Read-only composition endpoint that aggregates platform KPIs, today metrics, top venues/events, latest activity, and critical alerts for the platform admin home screen.",
+        "operationId": "admin.dashboard.show",
+        "responses": {
+          "200": {
+            "description": "Admin dashboard overview",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "properties": {
+                        "kpis": {
+                          "$ref": "#/components/schemas/AdminDashboardKpis"
+                        },
+                        "today": {
+                          "$ref": "#/components/schemas/AdminDashboardToday"
+                        },
+                        "top_venues": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminReportTopVenue"
+                          }
+                        },
+                        "top_events": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminReportTopEvent"
+                          }
+                        },
+                        "latest_orders": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminDashboardOrder"
+                          }
+                        },
+                        "latest_payments": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminDashboardPayment"
+                          }
+                        },
+                        "latest_check_ins": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminDashboardCheckIn"
+                          }
+                        },
+                        "alerts": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminDashboardAlert"
+                          }
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/AdminDashboardMeta"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "example": {
+                  "data": {
+                    "kpis": {
+                      "gross_revenue": "125000.00",
+                      "net_revenue": "120000.00",
+                      "commission_due": "12500.00",
+                      "commission_paid": "9000.00",
+                      "outstanding_commission": "3500.00",
+                      "active_events": 42,
+                      "active_venues": 18,
+                      "orders_count": 2400,
+                      "tickets_sold": 4800
+                    },
+                    "today": {
+                      "today_sales": "4500.00",
+                      "today_revenue": "4300.00",
+                      "today_orders": 60,
+                      "today_check_ins": 180,
+                      "events_starting_today": 3
+                    },
+                    "top_venues": [
+                      {
+                        "venue_id": 1,
+                        "venue_name": "Alpha Venue",
+                        "subdomain": "alpha",
+                        "gross_sales": "50000.00",
+                        "commission_due": "5000.00",
+                        "outstanding_commission": "1200.00"
+                      }
+                    ],
+                    "top_events": [
+                      {
+                        "event_id": 12,
+                        "event_name": "Summer Festival",
+                        "venue_name": "Alpha Venue",
+                        "gross_sales": "25000.00",
+                        "tickets_sold": 500
+                      }
+                    ],
+                    "latest_orders": [
+                      {
+                        "order_number": "ORD-10042",
+                        "customer_name": "Jane Doe",
+                        "amount": "75.00",
+                        "status": "paid",
+                        "venue_name": "Alpha Venue",
+                        "created_at": "2026-07-13T14:22:00+00:00"
+                      }
+                    ],
+                    "latest_payments": [
+                      {
+                        "id": 501,
+                        "venue_name": "Alpha Venue",
+                        "order_number": "ORD-10042",
+                        "amount": "75.00",
+                        "currency": "USD",
+                        "provider": "shamcash",
+                        "status": "paid",
+                        "verified_at": "2026-07-13T14:25:00+00:00"
+                      }
+                    ],
+                    "latest_check_ins": [
+                      {
+                        "ticket_number": "EVT-001-000123",
+                        "holder_name": "Jane Doe",
+                        "venue_name": "Alpha Venue",
+                        "checked_in_at": "2026-07-13T15:05:00+00:00",
+                        "gate": "Gate 1"
+                      }
+                    ],
+                    "alerts": [
+                      {
+                        "type": "outstanding_commission",
+                        "severity": "warning",
+                        "count": 4,
+                        "amount": "3500.00",
+                        "message": "Organizers owe platform commission."
+                      },
+                      {
+                        "type": "events_starting_today",
+                        "severity": "info",
+                        "count": 3,
+                        "message": "Events scheduled to start today."
+                      },
+                      {
+                        "type": "failed_payment_verifications",
+                        "severity": "danger",
+                        "count": 2,
+                        "message": "Failed payment verifications in the last 24 hours."
+                      }
+                    ],
+                    "meta": {
+                      "currency": "USD",
+                      "generated_at": "2026-07-13T16:00:00+00:00"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sanctum": []
+          }
+        ]
+      }
+    },
+    "/api/admin/reports": {
+      "get": {
+        "tags": [
+          "Admin",
+          "Reports"
+        ],
+        "summary": "Platform operational and financial report",
+        "description": "Read-only platform-wide report for super administrators. Aggregates revenue, commissions, top venues/events, payment methods, and refunds.",
+        "operationId": "admin.reports.show",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Inclusive start date (applied as start of day).",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-01"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Inclusive end date (applied as end of day). Must be on or after `from`.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-01-31"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum rows returned for `top_venues` and `top_events` (default 10, max 100).",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 10,
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin platform report",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "properties": {
+                        "platform": {
+                          "$ref": "#/components/schemas/AdminReportPlatform"
+                        },
+                        "commissions": {
+                          "$ref": "#/components/schemas/AdminReportCommissions"
+                        },
+                        "top_venues": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminReportTopVenue"
+                          }
+                        },
+                        "top_events": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminReportTopEvent"
+                          }
+                        },
+                        "payment_methods": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdminReportPaymentMethod"
+                          }
+                        },
+                        "refunds": {
+                          "$ref": "#/components/schemas/AdminReportRefunds"
+                        },
+                        "meta": {
+                          "$ref": "#/components/schemas/AdminReportMeta"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "example": {
+                  "data": {
+                    "platform": {
+                      "gross_revenue": "50000.00",
+                      "net_revenue": "47500.00",
+                      "orders_count": 320,
+                      "tickets_sold": 640,
+                      "active_venues": 12
+                    },
+                    "commissions": {
+                      "commission_due": "5000.00",
+                      "commission_paid": "2500.00",
+                      "commission_adjustments": "150.00",
+                      "outstanding_commission": "2350.00",
+                      "monthly": [
+                        {
+                          "month": "2026-01",
+                          "commission_due": "1200.00",
+                          "commission_paid": "800.00"
+                        }
+                      ]
+                    },
+                    "top_venues": [
+                      {
+                        "venue_id": 1,
+                        "venue_name": "Alpha Venue",
+                        "subdomain": "alpha",
+                        "gross_sales": "20000.00",
+                        "commission_due": "2000.00",
+                        "outstanding_commission": "500.00"
+                      }
+                    ],
+                    "top_events": [
+                      {
+                        "event_id": 10,
+                        "event_name": "Summer Festival",
+                        "venue_id": 1,
+                        "venue_name": "Alpha Venue",
+                        "gross_sales": "8000.00",
+                        "tickets_sold": 400
+                      }
+                    ],
+                    "payment_methods": [
+                      {
+                        "method": "shamcash",
+                        "transactions_count": 180,
+                        "total_amount": "30000.00"
+                      }
+                    ],
+                    "refunds": {
+                      "refunds_count": 8,
+                      "refunded_amount": "2500.00",
+                      "refund_rate": "5.00"
+                    },
+                    "meta": {
+                      "from": "2026-01-01T00:00:00+00:00",
+                      "to": "2026-01-31T23:59:59+00:00",
+                      "currency": "USD",
+                      "limit": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sanctum": []
+          }
+        ]
+      }
+    },
+    "/api/admin/settlement/venues": {
+      "get": {
+        "tags": [
+          "Admin",
+          "Settlement"
+        ],
+        "summary": "List venue settlement summaries",
+        "operationId": "admin.settlement.venues.index",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "name",
+                "gross_sales",
+                "commission_paid",
+                "outstanding",
+                "outstanding_commission",
+                "last_payment"
+              ]
+            }
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "min_outstanding",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue settlement list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSettlementVenueListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sanctum": []
+          }
+        ]
+      }
+    },
+    "/api/admin/venues/{venue}/settlement": {
+      "get": {
+        "tags": [
+          "Admin",
+          "Settlement"
+        ],
+        "summary": "Venue settlement statement",
+        "operationId": "admin.venues.settlement.show",
+        "parameters": [
+          {
+            "name": "venue",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue settlement statement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "properties": {
+                        "summary": {
+                          "$ref": "#/components/schemas/SettlementSummary"
+                        },
+                        "entries": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/SettlementLedgerEntry"
+                          }
+                        },
+                        "payments": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        },
+                        "meta": {
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Venue not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sanctum": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "properties": {
+          "message": {
+            "description": "Generic API error envelope returned by `ApiExceptionRenderer`.",
+            "type": "string",
+            "example": "Resource not found."
+          }
+        },
+        "type": "object"
+      },
+      "MessageResponse": {
+        "properties": {
+          "message": {
+            "description": "Plain message envelope returned by `ApiResponse::plainMessage()`.",
+            "type": "string",
+            "example": "Operation completed successfully."
+          }
+        },
+        "type": "object"
+      },
+      "PaginationLinks": {
+        "properties": {
+          "first": {
+            "description": "Projection of paginated list `links` envelope (see `ApiResponse::paginationLinks`).",
+            "type": "string",
+            "nullable": true
+          },
+          "last": {
+            "type": "string",
+            "nullable": true
+          },
+          "prev": {
+            "type": "string",
+            "nullable": true
+          },
+          "next": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PaginationMeta": {
+        "properties": {
+          "current_page": {
+            "description": "Projection of paginated list `meta` envelope (see `ApiResponse::paginationMeta`).",
+            "type": "integer",
+            "example": 1
+          },
+          "from": {
+            "type": "integer",
+            "example": 1,
+            "nullable": true
+          },
+          "last_page": {
+            "type": "integer",
+            "example": 3
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/tenant/events"
+          },
+          "per_page": {
+            "type": "integer",
+            "example": 15
+          },
+          "to": {
+            "type": "integer",
+            "example": 15,
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "example": 42
+          }
+        },
+        "type": "object"
+      },
+      "ValidationErrorResponse": {
+        "properties": {
+          "message": {
+            "description": "Validation error envelope returned by Laravel `ValidationException` handler.",
+            "type": "string",
+            "example": "The given data was invalid."
+          },
+          "errors": {
+            "type": "object",
+            "example": {
+              "email": [
+                "The email field is required."
+              ]
+            },
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "type": "object"
+      },
+      "CreateEventRequest": {
+        "required": [
+          "name",
+          "start_datetime",
+          "end_datetime"
+        ],
+        "properties": {
+          "name": {
+            "description": "Projection of `App\\Http\\Requests\\Events\\CreateEventRequest`.",
+            "type": "string",
+            "example": "Summer Festival",
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255
+          },
+          "category_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "banner_url": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 2048
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "video_url": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 2048
+          },
+          "dj_info": {
+            "type": "object",
+            "nullable": true
+          },
+          "start_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-01T18:00:00+00:00"
+          },
+          "end_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-02T02:00:00+00:00"
+          }
+        },
+        "type": "object"
+      },
+      "CreateOrderRequest": {
+        "required": [
+          "event_id",
+          "customer_name",
+          "customer_email",
+          "line_items"
+        ],
+        "properties": {
+          "event_id": {
+            "description": "Projection of `App\\Http\\Requests\\Orders\\CreateOrderRequest`.",
+            "type": "integer",
+            "example": 1
+          },
+          "customer_name": {
+            "type": "string",
+            "example": "Jane Doe",
+            "maxLength": 255
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          },
+          "customer_phone": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 50
+          },
+          "customer_user_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "reservation_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "line_items": {
+            "type": "array",
+            "items": {
+              "required": [
+                "ticket_type_id",
+                "quantity"
+              ],
+              "properties": {
+                "ticket_type_id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "quantity": {
+                  "type": "integer",
+                  "example": 2,
+                  "minimum": 1
+                }
+              },
+              "type": "object"
+            },
+            "minItems": 1
+          }
+        },
+        "type": "object",
+        "example": {
+          "event_id": 1,
+          "customer_name": "Jane Doe",
+          "customer_email": "jane@example.com",
+          "line_items": [
+            {
+              "ticket_type_id": 1,
+              "quantity": 2
+            }
+          ]
+        }
+      },
+      "CreatePublicOrderRequest": {
+        "description": "Guest checkout payload. customer_user_id and reservation_id are not accepted.",
+        "required": [
+          "event_id",
+          "customer_name",
+          "customer_email",
+          "line_items"
+        ],
+        "properties": {
+          "event_id": {
+            "description": "Must reference a published event in the current venue.",
+            "type": "integer",
+            "example": 1
+          },
+          "customer_name": {
+            "type": "string",
+            "example": "Jane Doe",
+            "maxLength": 255
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          },
+          "customer_phone": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 50
+          },
+          "line_items": {
+            "type": "array",
+            "items": {
+              "required": [
+                "ticket_type_id",
+                "quantity"
+              ],
+              "properties": {
+                "ticket_type_id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "quantity": {
+                  "type": "integer",
+                  "example": 2,
+                  "minimum": 1
+                }
+              },
+              "type": "object"
+            },
+            "minItems": 1
+          }
+        },
+        "type": "object",
+        "example": {
+          "event_id": 1,
+          "customer_name": "Jane Doe",
+          "customer_email": "jane@example.com",
+          "line_items": [
+            {
+              "ticket_type_id": 1,
+              "quantity": 2
+            }
+          ]
+        }
+      },
+      "InitiatePaymentRequest": {
+        "required": [
+          "order_id",
+          "provider"
+        ],
+        "properties": {
+          "order_id": {
+            "description": "Projection of `App\\Http\\Requests\\Payments\\InitiatePaymentRequest`.",
+            "type": "integer",
+            "example": 1
+          },
+          "provider": {
+            "type": "string",
+            "example": "apisyria",
+            "maxLength": 50
+          }
+        },
+        "type": "object"
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "description": "Projection of `App\\Http\\Requests\\Auth\\LoginRequest`.",
+            "type": "string",
+            "format": "email",
+            "example": "owner@venue.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "password"
+          },
+          "device_name": {
+            "type": "string",
+            "example": "web",
+            "nullable": true,
+            "maxLength": 255
+          }
+        },
+        "type": "object"
+      },
+      "RecordCommissionPaymentRequest": {
+        "required": [
+          "venue_id",
+          "amount",
+          "payment_method",
+          "received_at"
+        ],
+        "properties": {
+          "venue_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "amount": {
+            "type": "string",
+            "example": "20.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3
+          },
+          "payment_method": {
+            "type": "string",
+            "enum": [
+              "cash",
+              "shamcash",
+              "syriatel_cash",
+              "bank_transfer",
+              "other"
+            ]
+          },
+          "reference_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payment_account_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "RegisterRequest": {
+        "required": [
+          "name",
+          "email",
+          "password",
+          "password_confirmation"
+        ],
+        "properties": {
+          "name": {
+            "description": "Projection of `App\\Http\\Requests\\Auth\\RegisterRequest`.",
+            "type": "string",
+            "example": "Jane Doe",
+            "maxLength": 255
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8
+          },
+          "password_confirmation": {
+            "type": "string",
+            "format": "password"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 50
+          }
+        },
+        "type": "object"
+      },
+      "SubmitPublicPaymentVerificationRequest": {
+        "required": [
+          "transaction_number"
+        ],
+        "properties": {
+          "transaction_number": {
+            "description": "Wallet provider transfer reference submitted by the guest.",
+            "type": "string",
+            "example": "TX-1001",
+            "maxLength": 255
+          }
+        },
+        "type": "object"
+      },
+      "VerifyPaymentRequest": {
+        "required": [
+          "transaction_number"
+        ],
+        "properties": {
+          "transaction_number": {
+            "description": "Projection of `App\\Http\\Requests\\Payments\\VerifyPaymentRequest`.",
+            "type": "string",
+            "example": "TX-1001",
+            "maxLength": 255
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardKpis": {
+        "properties": {
+          "gross_revenue": {
+            "type": "string",
+            "example": "125000.00"
+          },
+          "net_revenue": {
+            "type": "string",
+            "example": "120000.00"
+          },
+          "commission_due": {
+            "type": "string",
+            "example": "12500.00"
+          },
+          "commission_paid": {
+            "type": "string",
+            "example": "9000.00"
+          },
+          "outstanding_commission": {
+            "type": "string",
+            "example": "3500.00"
+          },
+          "active_events": {
+            "type": "integer",
+            "example": 42
+          },
+          "active_venues": {
+            "type": "integer",
+            "example": 18
+          },
+          "orders_count": {
+            "type": "integer",
+            "example": 2400
+          },
+          "tickets_sold": {
+            "type": "integer",
+            "example": 4800
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardToday": {
+        "properties": {
+          "today_sales": {
+            "type": "string",
+            "example": "4500.00"
+          },
+          "today_revenue": {
+            "type": "string",
+            "example": "4300.00"
+          },
+          "today_orders": {
+            "type": "integer",
+            "example": 60
+          },
+          "today_check_ins": {
+            "type": "integer",
+            "example": 180
+          },
+          "events_starting_today": {
+            "type": "integer",
+            "example": 3
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardOrder": {
+        "properties": {
+          "order_number": {
+            "type": "string"
+          },
+          "customer_name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardPayment": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "order_number": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "verified_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardCheckIn": {
+        "properties": {
+          "ticket_number": {
+            "type": "string"
+          },
+          "holder_name": {
+            "type": "string"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "checked_in_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "gate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardAlert": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "outstanding_commission",
+              "events_starting_today",
+              "failed_payment_verifications"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warning",
+              "danger"
+            ]
+          },
+          "count": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AdminDashboardMeta": {
+        "properties": {
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportPlatform": {
+        "properties": {
+          "gross_revenue": {
+            "type": "string",
+            "example": "50000.00"
+          },
+          "net_revenue": {
+            "type": "string",
+            "example": "47500.00"
+          },
+          "orders_count": {
+            "type": "integer",
+            "example": 320
+          },
+          "tickets_sold": {
+            "type": "integer",
+            "example": 640
+          },
+          "active_venues": {
+            "type": "integer",
+            "example": 12
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportCommissions": {
+        "properties": {
+          "commission_due": {
+            "type": "string",
+            "example": "5000.00"
+          },
+          "commission_paid": {
+            "type": "string",
+            "example": "2500.00"
+          },
+          "commission_adjustments": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "outstanding_commission": {
+            "type": "string",
+            "example": "2350.00"
+          },
+          "monthly": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "month": {
+                  "type": "string",
+                  "example": "2026-01"
+                },
+                "commission_due": {
+                  "type": "string",
+                  "example": "1200.00"
+                },
+                "commission_paid": {
+                  "type": "string",
+                  "example": "800.00"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportTopVenue": {
+        "properties": {
+          "venue_id": {
+            "type": "integer"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "subdomain": {
+            "type": "string"
+          },
+          "gross_sales": {
+            "type": "string"
+          },
+          "commission_due": {
+            "type": "string"
+          },
+          "outstanding_commission": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportTopEvent": {
+        "properties": {
+          "event_id": {
+            "type": "integer"
+          },
+          "event_name": {
+            "type": "string"
+          },
+          "venue_id": {
+            "type": "integer"
+          },
+          "venue_name": {
+            "type": "string"
+          },
+          "gross_sales": {
+            "type": "string"
+          },
+          "tickets_sold": {
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportPaymentMethod": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "example": "shamcash"
+          },
+          "transactions_count": {
+            "type": "integer",
+            "example": 42
+          },
+          "total_amount": {
+            "type": "string",
+            "example": "12500.00"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportRefunds": {
+        "properties": {
+          "refunds_count": {
+            "type": "integer",
+            "example": 8
+          },
+          "refunded_amount": {
+            "type": "string",
+            "example": "2500.00"
+          },
+          "refund_rate": {
+            "type": "string",
+            "example": "5.00"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReportMeta": {
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
+          }
+        },
+        "type": "object"
+      },
+      "ApiTokenResource": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/AuthenticatedUserResource"
+          },
+          "token": {
+            "type": "string",
+            "example": "1|plainTextToken"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          }
+        },
+        "type": "object"
+      },
+      "AuthenticatedUserResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Auth\\AuthenticatedUserResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_super_admin": {
+            "type": "boolean",
+            "example": false
+          },
+          "email_verified_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "CategoryResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Events\\CategoryResource`.",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "sort_order": {
+            "type": "integer"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "CommissionPaymentResource": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "venue_id": {
+            "type": "integer"
+          },
+          "payment_account_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "amount": {
+            "type": "string",
+            "example": "20.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "payment_method": {
+            "type": "string",
+            "enum": [
+              "cash",
+              "shamcash",
+              "syriatel_cash",
+              "bank_transfer",
+              "other"
+            ]
+          },
+          "reference_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "received_by_user_id": {
+            "type": "integer"
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true
+          },
+          "outstanding_commission": {
+            "type": "string",
+            "example": "10.00"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "CouponResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Commerce\\CouponResource`.",
+            "type": "integer"
+          },
+          "code": {
+            "type": "string"
+          },
+          "discount_type": {
+            "type": "string",
+            "enum": [
+              "percent",
+              "fixed"
+            ]
+          },
+          "discount_value": {
+            "type": "string"
+          },
+          "min_order_amount": {
+            "type": "string",
+            "nullable": true
+          },
+          "max_uses": {
+            "type": "integer",
+            "nullable": true
+          },
+          "used_count": {
+            "type": "integer"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "EventResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Events\\EventResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "category_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Summer Festival"
+          },
+          "slug": {
+            "type": "string",
+            "example": "summer-festival"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "banner_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "video_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "dj_info": {
+            "type": "object",
+            "nullable": true
+          },
+          "start_datetime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_datetime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "cancelled",
+              "completed"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "example": 1
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "OrderResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Orders\\OrderResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "event_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "customer_user_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "order_number": {
+            "type": "string",
+            "example": "ORD-20260708-0001"
+          },
+          "subtotal": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "tax_amount": {
+            "type": "string",
+            "example": "0.00"
+          },
+          "discount_amount": {
+            "type": "string",
+            "example": "0.00"
+          },
+          "total": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "commission_amount": {
+            "type": "string",
+            "nullable": true
+          },
+          "coupon_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "promo_code_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "payment_method": {
+            "type": "string",
+            "nullable": true
+          },
+          "payment_reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed",
+              "refunded",
+              "cancelled"
+            ]
+          },
+          "customer_name": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email"
+          },
+          "customer_phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardKpis": {
+        "properties": {
+          "gross_sales": {
+            "type": "string",
+            "example": "12500.00"
+          },
+          "net_revenue": {
+            "type": "string",
+            "example": "12000.00"
+          },
+          "orders_count": {
+            "type": "integer",
+            "example": 84
+          },
+          "tickets_sold": {
+            "type": "integer",
+            "example": 160
+          },
+          "tickets_remaining": {
+            "type": "integer",
+            "example": 40
+          },
+          "attendance_rate": {
+            "type": "string",
+            "example": "72.50"
+          },
+          "outstanding_commission": {
+            "type": "string",
+            "example": "350.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardToday": {
+        "properties": {
+          "today_sales": {
+            "type": "string",
+            "example": "450.00"
+          },
+          "today_orders": {
+            "type": "integer",
+            "example": 6
+          },
+          "today_check_ins": {
+            "type": "integer",
+            "example": 18
+          },
+          "today_revenue": {
+            "type": "string",
+            "example": "430.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardEvent": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tickets_sold": {
+            "type": "integer"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "remaining": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardOrder": {
+        "properties": {
+          "order_number": {
+            "type": "string"
+          },
+          "customer_name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardCheckIn": {
+        "properties": {
+          "ticket_number": {
+            "type": "string"
+          },
+          "holder_name": {
+            "type": "string"
+          },
+          "checked_in_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "gate": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardCommission": {
+        "properties": {
+          "due": {
+            "type": "string",
+            "example": "1250.00"
+          },
+          "paid": {
+            "type": "string",
+            "example": "900.00"
+          },
+          "outstanding": {
+            "type": "string",
+            "example": "350.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerDashboardMeta": {
+        "properties": {
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerReportSales": {
+        "properties": {
+          "gross_sales": {
+            "type": "string",
+            "example": "1250.00"
+          },
+          "orders_count": {
+            "type": "integer",
+            "example": 42
+          },
+          "tickets_sold": {
+            "type": "integer",
+            "example": 80
+          },
+          "average_order_value": {
+            "type": "string",
+            "example": "29.76"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerReportRevenue": {
+        "properties": {
+          "gross_revenue": {
+            "type": "string",
+            "example": "1250.00"
+          },
+          "refunded_amount": {
+            "type": "string",
+            "example": "50.00"
+          },
+          "net_revenue": {
+            "type": "string",
+            "example": "1200.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerReportAttendance": {
+        "properties": {
+          "tickets_issued": {
+            "type": "integer",
+            "example": 80
+          },
+          "checked_in": {
+            "type": "integer",
+            "example": 60
+          },
+          "attendance_rate": {
+            "type": "string",
+            "example": "75.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerReportCommission": {
+        "properties": {
+          "commission_due": {
+            "type": "string",
+            "example": "125.00"
+          },
+          "commission_paid": {
+            "type": "string",
+            "example": "50.00"
+          },
+          "outstanding_commission": {
+            "type": "string",
+            "example": "75.00"
+          }
+        },
+        "type": "object"
+      },
+      "OrganizerReportMeta": {
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "event_id": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PaymentInstructionResource": {
+        "properties": {
+          "payment_id": {
+            "description": "Projection of `App\\Http\\Resources\\Payments\\PaymentInstructionResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "provider": {
+            "type": "string",
+            "example": "apisyria"
+          },
+          "merchant_account": {
+            "type": "string",
+            "example": "WALLET-001"
+          },
+          "amount": {
+            "type": "string",
+            "example": "120.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PaymentTransactionResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Payments\\PaymentTransactionResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "order_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "provider": {
+            "type": "string",
+            "example": "apisyria"
+          },
+          "provider_transaction_id": {
+            "type": "string",
+            "example": "APISYRIA-TX-1001",
+            "nullable": true
+          },
+          "transaction_number": {
+            "type": "string",
+            "example": "TX-1001",
+            "nullable": true
+          },
+          "amount": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed",
+              "failed",
+              "refunded",
+              "awaiting_transfer",
+              "verifying",
+              "paid",
+              "expired"
+            ]
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "payload": {
+            "description": "Visible only to users with orders.manage permission.",
+            "type": "object",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PlatformSettingResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\PlatformSettings\\PlatformSettingResource`.",
+            "type": "integer"
+          },
+          "commission_rate": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "ProductResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Commerce\\ProductResource`.",
+            "type": "integer"
+          },
+          "event_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "ProductVariantResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Commerce\\ProductVariantResource`.",
+            "type": "integer"
+          },
+          "product_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string",
+            "nullable": true
+          },
+          "price_override": {
+            "type": "string",
+            "nullable": true
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PromoCodeResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Commerce\\PromoCodeResource`.",
+            "type": "integer"
+          },
+          "code": {
+            "type": "string"
+          },
+          "discount_type": {
+            "type": "string",
+            "enum": [
+              "percent",
+              "fixed"
+            ]
+          },
+          "discount_value": {
+            "type": "string"
+          },
+          "min_order_amount": {
+            "type": "string",
+            "nullable": true
+          },
+          "max_uses": {
+            "type": "integer",
+            "nullable": true
+          },
+          "used_count": {
+            "type": "integer"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PublicEventDetailItem": {
+        "description": "Public catalog detail projection of a published event for anonymous visitors.",
+        "required": [
+          "id",
+          "slug",
+          "title",
+          "description",
+          "venue",
+          "starts_at",
+          "ticket_types"
+        ],
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Events\\PublicEventDetailResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "slug": {
+            "type": "string",
+            "example": "summer-jazz-night"
+          },
+          "title": {
+            "type": "string",
+            "example": "Summer Jazz Night"
+          },
+          "description": {
+            "type": "string",
+            "example": "A short teaser description for the catalog listing."
+          },
+          "venue": {
+            "type": "string",
+            "example": "Harborview Pavilion"
+          },
+          "image_url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-15T19:30:00Z"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-15T22:30:00Z",
+            "nullable": true
+          },
+          "starting_price": {
+            "properties": {
+              "amount": {
+                "type": "string",
+                "example": "45.00"
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD",
+                "maxLength": 3,
+                "minLength": 3
+              }
+            },
+            "type": "object",
+            "nullable": true
+          },
+          "ticket_types": {
+            "type": "array",
+            "items": {
+              "required": [
+                "id",
+                "name",
+                "price",
+                "remaining",
+                "is_available"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "General Admission"
+                },
+                "price": {
+                  "required": [
+                    "amount",
+                    "currency"
+                  ],
+                  "properties": {
+                    "amount": {
+                      "type": "string",
+                      "example": "45.00"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "example": "USD"
+                    }
+                  },
+                  "type": "object"
+                },
+                "remaining": {
+                  "type": "integer",
+                  "example": 42
+                },
+                "is_available": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "benefits": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "color": {
+                  "type": "string",
+                  "example": "#336699",
+                  "nullable": true
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "PublicEventListItem": {
+        "description": "Public catalog projection of a published event for anonymous visitors. Intentionally separate from tenant EventResource.",
+        "required": [
+          "id",
+          "slug",
+          "title",
+          "description",
+          "venue",
+          "starts_at"
+        ],
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Events\\PublicEventListItemResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "slug": {
+            "type": "string",
+            "example": "summer-jazz-night"
+          },
+          "title": {
+            "type": "string",
+            "example": "Summer Jazz Night"
+          },
+          "description": {
+            "type": "string",
+            "example": "A short teaser description for the catalog listing."
+          },
+          "venue": {
+            "type": "string",
+            "example": "Harborview Pavilion"
+          },
+          "image_url": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-15T19:30:00Z"
+          },
+          "starting_price": {
+            "properties": {
+              "amount": {
+                "description": "Decimal amount as string (consistent with other money schemas in this spec).",
+                "type": "string",
+                "example": "45.00"
+              },
+              "currency": {
+                "type": "string",
+                "example": "USD",
+                "maxLength": 3,
+                "minLength": 3
+              }
+            },
+            "type": "object",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "PublicOrderResource": {
+        "description": "Limited public projection of a guest-created order. Internal financial fields are omitted.",
+        "required": [
+          "id",
+          "order_number",
+          "status",
+          "total",
+          "customer_name",
+          "customer_email"
+        ],
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Orders\\PublicOrderResource`.",
+            "type": "integer",
+            "example": 1
+          },
+          "order_number": {
+            "type": "string",
+            "example": "ORD-ABC12345"
+          },
+          "status": {
+            "type": "string",
+            "example": "pending"
+          },
+          "total": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "customer_name": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "customer_email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          }
+        },
+        "type": "object"
+      },
+      "PublicPaymentInstructionResource": {
+        "description": "Guest-facing payment instructions. Numeric payment and account ids are intentionally omitted.",
+        "required": [
+          "provider",
+          "merchant_account",
+          "amount",
+          "currency",
+          "expires_at",
+          "instructions"
+        ],
+        "properties": {
+          "provider": {
+            "description": "Wallet brand label for the guest.",
+            "type": "string",
+            "example": "shamcash"
+          },
+          "merchant_account": {
+            "type": "string",
+            "example": "WALLET-001"
+          },
+          "amount": {
+            "type": "string",
+            "example": "120.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PublicPaymentVerificationResource": {
+        "description": "Guest-facing verification outcome. Internal payment fields are omitted.",
+        "required": [
+          "status",
+          "message"
+        ],
+        "properties": {
+          "status": {
+            "description": "Projection of `App\\Http\\Resources\\Payments\\PublicPaymentVerificationResource`.",
+            "type": "string",
+            "example": "paid",
+            "enum": [
+              "paid",
+              "failed",
+              "verifying",
+              "awaiting_transfer",
+              "expired"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "example": "Payment confirmed."
+          }
+        },
+        "type": "object"
+      },
+      "SettlementSummary": {
+        "properties": {
+          "gross_sales": {
+            "type": "string",
+            "example": "125000.00"
+          },
+          "tickets_sold": {
+            "type": "integer",
+            "example": 320
+          },
+          "commission_due": {
+            "type": "string",
+            "example": "1250.00"
+          },
+          "commission_paid": {
+            "type": "string",
+            "example": "500.00"
+          },
+          "commission_adjustments": {
+            "type": "string",
+            "example": "50.00"
+          },
+          "commission_outstanding": {
+            "type": "string",
+            "example": "700.00"
+          },
+          "refunds": {
+            "type": "string",
+            "example": "5000.00"
+          },
+          "net_sales": {
+            "type": "string",
+            "example": "120000.00"
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          }
+        },
+        "type": "object"
+      },
+      "SettlementLedgerEntry": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "credit": {
+            "type": "string",
+            "example": "10.00"
+          },
+          "debit": {
+            "type": "string",
+            "example": "0.00"
+          },
+          "balance": {
+            "type": "string",
+            "example": "150.00"
+          },
+          "order_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "event_id": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "AdminSettlementVenueListResponse": {
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "meta": {
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "TaxRateResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\TaxRates\\TaxRateResource`.",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      },
+      "TicketCheckInResult": {
+        "required": [
+          "valid",
+          "ticket_number",
+          "holder_name",
+          "event_name",
+          "status"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "example": true
+          },
+          "ticket_number": {
+            "type": "string",
+            "example": "EV000001-260801-000001"
+          },
+          "holder_name": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "event_name": {
+            "type": "string",
+            "example": "Summer Fest"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "checked_in"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "TicketTypeResource": {
+        "properties": {
+          "id": {
+            "description": "Projection of `App\\Http\\Resources\\Events\\TicketTypeResource`.",
+            "type": "integer"
+          },
+          "event_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "quantity_sold": {
+            "type": "integer"
+          },
+          "sale_start": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sale_end": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "benefits": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "sanctum": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Sanctum Personal Access Token",
+        "description": "Laravel Sanctum bearer token. Obtain via /api/auth/login or /api/tenant/auth/login."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Admin"
+    },
+    {
+      "name": "Dashboard",
+      "description": "Dashboard"
+    },
+    {
+      "name": "Reports",
+      "description": "Reports"
+    },
+    {
+      "name": "Settlement",
+      "description": "Settlement"
+    }
+  ],
+  "security": [
+    {
+      "sanctum": []
+    }
+  ]
+}

@@ -6,3 +6,5 @@ build
 coverage
 pnpm-lock.yaml
 .turbo
+packages/api-client/src/core/generated/**
+packages/api-client/openapi/filtered/**

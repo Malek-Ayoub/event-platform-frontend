@@ -4,1953 +4,1945 @@
  */
 
 export interface paths {
-  '/api/health': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health check */
+        get: operations["api.health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Health check */
-    get: operations['api.health'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/register': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Register a new user */
+        post: operations["auth.register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Register a new user */
-    post: operations['auth.register'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/login': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Platform login */
+        post: operations["auth.login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Platform login */
-    post: operations['auth.login'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/password/forgot': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/password/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Request password reset link */
+        post: operations["auth.password.forgot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Request password reset link */
-    post: operations['auth.password.forgot'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/password/reset': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset password with token */
+        post: operations["auth.password.reset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Reset password with token */
-    post: operations['auth.password.reset'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/logout': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke current token */
+        post: operations["auth.logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Revoke current token */
-    post: operations['auth.logout'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/logout-all': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke all tokens */
+        post: operations["auth.logout-all"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Revoke all tokens */
-    post: operations['auth.logout-all'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/user': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get authenticated user */
+        get: operations["auth.user"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get authenticated user */
-    get: operations['auth.user'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/password/change': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/password/change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change password */
+        post: operations["auth.password.change"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Change password */
-    post: operations['auth.password.change'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/email/verification-notification': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/email/verification-notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resend email verification notification */
+        post: operations["verification.send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** Resend email verification notification */
-    post: operations['verification.send'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/auth/email/verify/{id}/{hash}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/auth/email/verify/{id}/{hash}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verify email address */
+        get: operations["verification.verify"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Verify email address */
-    get: operations['verification.verify'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/platform/settings': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/platform/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get platform settings */
+        get: operations["platform.settings.show"];
+        /** Update platform settings */
+        put: operations["platform.settings.update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get platform settings */
-    get: operations['platform.settings.show'];
-    /** Update platform settings */
-    put: operations['platform.settings.update'];
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/public/events': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/public/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List published events (public catalog)
+         * @description Public, unauthenticated catalog of published events for the current venue context. Only events with status `published` are included. No Authorization header is required.
+         */
+        get: operations["public.events.index"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * List published events (public catalog)
-     * @description Public, unauthenticated catalog of published events for the current venue context. Only events with status `published` are included. No Authorization header is required.
-     */
-    get: operations['public.events.index'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/public/events/{slug}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/public/events/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Show a published event (public catalog)
+         * @description Public, unauthenticated detail for a single published event in the current venue context. Draft, cancelled, and completed events return 404. No Authorization header is required.
+         */
+        get: operations["public.events.show"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Show a published event (public catalog)
-     * @description Public, unauthenticated detail for a single published event in the current venue context. Draft, cancelled, and completed events return 404. No Authorization header is required.
-     */
-    get: operations['public.events.show'];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/public/orders': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/public/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a guest order (public checkout)
+         * @description Public, unauthenticated order creation for a published event in the current venue context. Guests cannot set customer_user_id or reservation_id. Rate limited to 10 requests per minute per IP. No Authorization header is required.
+         */
+        post: operations["public.orders.store"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Create a guest order (public checkout)
-     * @description Public, unauthenticated order creation for a published event in the current venue context. Guests cannot set customer_user_id or reservation_id. Rate limited to 10 requests per minute per IP. No Authorization header is required.
-     */
-    post: operations['public.orders.store'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/public/orders/{orderNumber}/payment-instructions': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/public/orders/{orderNumber}/payment-instructions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create guest payment instructions
+         * @description Public, unauthenticated payment instructions for a pending order identified by order_number. Rate limited to 10 requests per minute per IP. No Authorization header is required. Does not expose numeric payment ids.
+         */
+        post: operations["public.orders.payment-instructions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Create guest payment instructions
-     * @description Public, unauthenticated payment instructions for a pending order identified by order_number. Rate limited to 10 requests per minute per IP. No Authorization header is required. Does not expose numeric payment ids.
-     */
-    post: operations['public.orders.payment-instructions'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/public/orders/{orderNumber}/payment-verification': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/api/public/orders/{orderNumber}/payment-verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify guest payment by transaction number
+         * @description Public, unauthenticated verification of a wallet transfer for a pending order. Looks up the latest awaiting_transfer/verifying payment internally — payment ids are never accepted from the client. Rate limited to 10 requests per minute per IP.
+         */
+        post: operations["public.orders.payment-verification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Verify guest payment by transaction number
-     * @description Public, unauthenticated verification of a wallet transfer for a pending order. Looks up the latest awaiting_transfer/verifying payment internally — payment ids are never accepted from the client. Rate limited to 10 requests per minute per IP.
-     */
-    post: operations['public.orders.payment-verification'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    ErrorResponse: {
-      /**
-       * @description Generic API error envelope returned by `ApiExceptionRenderer`.
-       * @example Resource not found.
-       */
-      message?: string;
-    };
-    MessageResponse: {
-      /**
-       * @description Plain message envelope returned by `ApiResponse::plainMessage()`.
-       * @example Operation completed successfully.
-       */
-      message?: string;
-    };
-    PaginationLinks: {
-      /** @description Projection of paginated list `links` envelope (see `ApiResponse::paginationLinks`). */
-      first?: string | null;
-      last?: string | null;
-      prev?: string | null;
-      next?: string | null;
-    };
-    PaginationMeta: {
-      /**
-       * @description Projection of paginated list `meta` envelope (see `ApiResponse::paginationMeta`).
-       * @example 1
-       */
-      current_page?: number;
-      /** @example 1 */
-      from?: number | null;
-      /** @example 3 */
-      last_page?: number;
-      /** @example /api/tenant/events */
-      path?: string;
-      /** @example 15 */
-      per_page?: number;
-      /** @example 15 */
-      to?: number | null;
-      /** @example 42 */
-      total?: number;
-    };
-    ValidationErrorResponse: {
-      /**
-       * @description Validation error envelope returned by Laravel `ValidationException` handler.
-       * @example The given data was invalid.
-       */
-      message?: string;
-      /**
-       * @example {
-       *       "email": [
-       *         "The email field is required."
-       *       ]
-       *     }
-       */
-      errors?: {
-        [key: string]: string[];
-      };
-    };
-    CreateEventRequest: {
-      /**
-       * @description Projection of `App\Http\Requests\Events\CreateEventRequest`.
-       * @example Summer Festival
-       */
-      name: string;
-      slug?: string | null;
-      category_id?: number | null;
-      description?: string | null;
-      banner_url?: string | null;
-      gallery?: string[] | null;
-      video_url?: string | null;
-      dj_info?: Record<string, never> | null;
-      /**
-       * Format: date-time
-       * @example 2026-08-01T18:00:00+00:00
-       */
-      start_datetime: string;
-      /**
-       * Format: date-time
-       * @example 2026-08-02T02:00:00+00:00
-       */
-      end_datetime: string;
-    };
-    /**
-     * @example {
-     *       "event_id": 1,
-     *       "customer_name": "Jane Doe",
-     *       "customer_email": "jane@example.com",
-     *       "line_items": [
-     *         {
-     *           "ticket_type_id": 1,
-     *           "quantity": 2
-     *         }
-     *       ]
-     *     }
-     */
-    CreateOrderRequest: {
-      /**
-       * @description Projection of `App\Http\Requests\Orders\CreateOrderRequest`.
-       * @example 1
-       */
-      event_id: number;
-      /** @example Jane Doe */
-      customer_name: string;
-      /**
-       * Format: email
-       * @example jane@example.com
-       */
-      customer_email: string;
-      customer_phone?: string | null;
-      customer_user_id?: number | null;
-      reservation_id?: number | null;
-      line_items: {
-        /** @example 1 */
-        ticket_type_id: number;
-        /** @example 2 */
-        quantity: number;
-      }[];
-    };
-    /**
-     * @description Guest checkout payload. customer_user_id and reservation_id are not accepted.
-     * @example {
-     *       "event_id": 1,
-     *       "customer_name": "Jane Doe",
-     *       "customer_email": "jane@example.com",
-     *       "line_items": [
-     *         {
-     *           "ticket_type_id": 1,
-     *           "quantity": 2
-     *         }
-     *       ]
-     *     }
-     */
-    CreatePublicOrderRequest: {
-      /**
-       * @description Must reference a published event in the current venue.
-       * @example 1
-       */
-      event_id: number;
-      /** @example Jane Doe */
-      customer_name: string;
-      /**
-       * Format: email
-       * @example jane@example.com
-       */
-      customer_email: string;
-      customer_phone?: string | null;
-      line_items: {
-        /** @example 1 */
-        ticket_type_id: number;
-        /** @example 2 */
-        quantity: number;
-      }[];
-    };
-    InitiatePaymentRequest: {
-      /**
-       * @description Projection of `App\Http\Requests\Payments\InitiatePaymentRequest`.
-       * @example 1
-       */
-      order_id: number;
-      /** @example apisyria */
-      provider: string;
-    };
-    LoginRequest: {
-      /**
-       * Format: email
-       * @description Projection of `App\Http\Requests\Auth\LoginRequest`.
-       * @example owner@venue.com
-       */
-      email: string;
-      /**
-       * Format: password
-       * @example password
-       */
-      password: string;
-      /** @example web */
-      device_name?: string | null;
-    };
-    RecordCommissionPaymentRequest: {
-      venue_id: number;
-      /** @example 20.00 */
-      amount: string;
-      /** @example USD */
-      currency?: string;
-      /** @enum {string} */
-      payment_method: 'cash' | 'shamcash' | 'syriatel_cash' | 'bank_transfer' | 'other';
-      reference_number?: string | null;
-      /** Format: date-time */
-      received_at: string;
-      payment_account_id?: number | null;
-      notes?: string | null;
-    };
-    RegisterRequest: {
-      /**
-       * @description Projection of `App\Http\Requests\Auth\RegisterRequest`.
-       * @example Jane Doe
-       */
-      name: string;
-      /**
-       * Format: email
-       * @example jane@example.com
-       */
-      email: string;
-      /** Format: password */
-      password: string;
-      /** Format: password */
-      password_confirmation: string;
-      phone?: string | null;
-    };
-    SubmitPublicPaymentVerificationRequest: {
-      /**
-       * @description Wallet provider transfer reference submitted by the guest.
-       * @example TX-1001
-       */
-      transaction_number: string;
-    };
-    VerifyPaymentRequest: {
-      /**
-       * @description Projection of `App\Http\Requests\Payments\VerifyPaymentRequest`.
-       * @example TX-1001
-       */
-      transaction_number: string;
-    };
-    AdminDashboardKpis: {
-      /** @example 125000.00 */
-      gross_revenue?: string;
-      /** @example 120000.00 */
-      net_revenue?: string;
-      /** @example 12500.00 */
-      commission_due?: string;
-      /** @example 9000.00 */
-      commission_paid?: string;
-      /** @example 3500.00 */
-      outstanding_commission?: string;
-      /** @example 42 */
-      active_events?: number;
-      /** @example 18 */
-      active_venues?: number;
-      /** @example 2400 */
-      orders_count?: number;
-      /** @example 4800 */
-      tickets_sold?: number;
-    };
-    AdminDashboardToday: {
-      /** @example 4500.00 */
-      today_sales?: string;
-      /** @example 4300.00 */
-      today_revenue?: string;
-      /** @example 60 */
-      today_orders?: number;
-      /** @example 180 */
-      today_check_ins?: number;
-      /** @example 3 */
-      events_starting_today?: number;
-    };
-    AdminDashboardOrder: {
-      order_number?: string;
-      customer_name?: string;
-      amount?: string;
-      status?: string;
-      venue_name?: string;
-      /** Format: date-time */
-      created_at?: string | null;
-    };
-    AdminDashboardPayment: {
-      id?: number;
-      venue_name?: string;
-      order_number?: string;
-      amount?: string;
-      currency?: string;
-      provider?: string;
-      status?: string;
-      /** Format: date-time */
-      verified_at?: string | null;
-    };
-    AdminDashboardCheckIn: {
-      ticket_number?: string;
-      holder_name?: string;
-      venue_name?: string;
-      /** Format: date-time */
-      checked_in_at?: string | null;
-      gate?: string | null;
-    };
-    AdminDashboardAlert: {
-      /** @enum {string} */
-      type?: 'outstanding_commission' | 'events_starting_today' | 'failed_payment_verifications';
-      /** @enum {string} */
-      severity?: 'info' | 'warning' | 'danger';
-      count?: number;
-      amount?: string | null;
-      message?: string;
-    };
-    AdminDashboardMeta: {
-      /** @example USD */
-      currency?: string;
-      /** Format: date-time */
-      generated_at?: string;
-    };
-    AdminReportPlatform: {
-      /** @example 50000.00 */
-      gross_revenue?: string;
-      /** @example 47500.00 */
-      net_revenue?: string;
-      /** @example 320 */
-      orders_count?: number;
-      /** @example 640 */
-      tickets_sold?: number;
-      /** @example 12 */
-      active_venues?: number;
-    };
-    AdminReportCommissions: {
-      /** @example 5000.00 */
-      commission_due?: string;
-      /** @example 2500.00 */
-      commission_paid?: string;
-      /** @example 150.00 */
-      commission_adjustments?: string;
-      /** @example 2350.00 */
-      outstanding_commission?: string;
-      monthly?: {
-        /** @example 2026-01 */
-        month?: string;
-        /** @example 1200.00 */
-        commission_due?: string;
-        /** @example 800.00 */
-        commission_paid?: string;
-      }[];
-    };
-    AdminReportTopVenue: {
-      venue_id?: number;
-      venue_name?: string;
-      subdomain?: string;
-      gross_sales?: string;
-      commission_due?: string;
-      outstanding_commission?: string;
-    };
-    AdminReportTopEvent: {
-      event_id?: number;
-      event_name?: string;
-      venue_id?: number;
-      venue_name?: string;
-      gross_sales?: string;
-      tickets_sold?: number;
-    };
-    AdminReportPaymentMethod: {
-      /** @example shamcash */
-      method?: string;
-      /** @example 42 */
-      transactions_count?: number;
-      /** @example 12500.00 */
-      total_amount?: string;
-    };
-    AdminReportRefunds: {
-      /** @example 8 */
-      refunds_count?: number;
-      /** @example 2500.00 */
-      refunded_amount?: string;
-      /** @example 5.00 */
-      refund_rate?: string;
-    };
-    AdminReportMeta: {
-      /** Format: date-time */
-      from?: string | null;
-      /** Format: date-time */
-      to?: string | null;
-      /** @example USD */
-      currency?: string;
-      /** @example 10 */
-      limit?: number;
-    };
-    ApiTokenResource: {
-      user?: components['schemas']['AuthenticatedUserResource'];
-      /** @example 1|plainTextToken */
-      token?: string;
-      /** @example Bearer */
-      token_type?: string;
-    };
-    AuthenticatedUserResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Auth\AuthenticatedUserResource`.
-       * @example 1
-       */
-      id?: number;
-      /** @example Jane Doe */
-      name?: string;
-      /**
-       * Format: email
-       * @example jane@example.com
-       */
-      email?: string;
-      phone?: string | null;
-      /** @example false */
-      is_super_admin?: boolean;
-      /** Format: date-time */
-      email_verified_at?: string | null;
-      /** Format: date-time */
-      created_at?: string | null;
-    };
-    CategoryResource: {
-      /** @description Projection of `App\Http\Resources\Events\CategoryResource`. */
-      id?: number;
-      name?: string;
-      slug?: string;
-      description?: string | null;
-      sort_order?: number;
-      is_active?: boolean;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    CommissionPaymentResource: {
-      id?: number;
-      venue_id?: number;
-      payment_account_id?: number | null;
-      /** @example 20.00 */
-      amount?: string;
-      /** @example USD */
-      currency?: string;
-      /** @enum {string} */
-      payment_method?: 'cash' | 'shamcash' | 'syriatel_cash' | 'bank_transfer' | 'other';
-      reference_number?: string | null;
-      /** Format: date-time */
-      received_at?: string;
-      received_by_user_id?: number;
-      notes?: string | null;
-      metadata?: Record<string, never> | null;
-      /** @example 10.00 */
-      outstanding_commission?: string;
-      /** Format: date-time */
-      created_at?: string;
-    };
-    CouponResource: {
-      /** @description Projection of `App\Http\Resources\Commerce\CouponResource`. */
-      id?: number;
-      code?: string;
-      /** @enum {string} */
-      discount_type?: 'percent' | 'fixed';
-      discount_value?: string;
-      min_order_amount?: string | null;
-      max_uses?: number | null;
-      used_count?: number;
-      /** Format: date-time */
-      starts_at?: string | null;
-      /** Format: date-time */
-      expires_at?: string | null;
-      is_active?: boolean;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    EventResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Events\EventResource`.
-       * @example 1
-       */
-      id?: number;
-      category_id?: number | null;
-      /** @example Summer Festival */
-      name?: string;
-      /** @example summer-festival */
-      slug?: string;
-      description?: string | null;
-      banner_url?: string | null;
-      gallery?: string[];
-      video_url?: string | null;
-      dj_info?: Record<string, never> | null;
-      /** Format: date-time */
-      start_datetime?: string;
-      /** Format: date-time */
-      end_datetime?: string;
-      /** @enum {string} */
-      status?: 'draft' | 'published' | 'cancelled' | 'completed';
-      /** @example 1 */
-      version?: number;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    OrderResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Orders\OrderResource`.
-       * @example 1
-       */
-      id?: number;
-      /** @example 1 */
-      event_id?: number;
-      customer_user_id?: number | null;
-      /** @example ORD-20260708-0001 */
-      order_number?: string;
-      /** @example 150.00 */
-      subtotal?: string;
-      /** @example 0.00 */
-      tax_amount?: string;
-      /** @example 0.00 */
-      discount_amount?: string;
-      /** @example 150.00 */
-      total?: string;
-      commission_amount?: string | null;
-      coupon_id?: number | null;
-      promo_code_id?: number | null;
-      payment_method?: string | null;
-      payment_reference?: string | null;
-      /** @enum {string} */
-      status?: 'pending' | 'paid' | 'failed' | 'refunded' | 'cancelled';
-      /** @example Jane Doe */
-      customer_name?: string;
-      /** Format: email */
-      customer_email?: string;
-      customer_phone?: string | null;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    OrganizerDashboardKpis: {
-      /** @example 12500.00 */
-      gross_sales?: string;
-      /** @example 12000.00 */
-      net_revenue?: string;
-      /** @example 84 */
-      orders_count?: number;
-      /** @example 160 */
-      tickets_sold?: number;
-      /** @example 40 */
-      tickets_remaining?: number;
-      /** @example 72.50 */
-      attendance_rate?: string;
-      /** @example 350.00 */
-      outstanding_commission?: string;
-    };
-    OrganizerDashboardToday: {
-      /** @example 450.00 */
-      today_sales?: string;
-      /** @example 6 */
-      today_orders?: number;
-      /** @example 18 */
-      today_check_ins?: number;
-      /** @example 430.00 */
-      today_revenue?: string;
-    };
-    OrganizerDashboardEvent: {
-      id?: number;
-      name?: string;
-      /** Format: date-time */
-      starts_at?: string;
-      tickets_sold?: number;
-      capacity?: number;
-      remaining?: number;
-      status?: string;
-    };
-    OrganizerDashboardOrder: {
-      order_number?: string;
-      customer_name?: string;
-      amount?: string;
-      status?: string;
-      /** Format: date-time */
-      created_at?: string | null;
-    };
-    OrganizerDashboardCheckIn: {
-      ticket_number?: string;
-      holder_name?: string;
-      /** Format: date-time */
-      checked_in_at?: string | null;
-      gate?: string | null;
-    };
-    OrganizerDashboardCommission: {
-      /** @example 1250.00 */
-      due?: string;
-      /** @example 900.00 */
-      paid?: string;
-      /** @example 350.00 */
-      outstanding?: string;
-    };
-    OrganizerDashboardMeta: {
-      /** @example USD */
-      currency?: string;
-      /** Format: date-time */
-      generated_at?: string;
-    };
-    OrganizerReportSales: {
-      /** @example 1250.00 */
-      gross_sales?: string;
-      /** @example 42 */
-      orders_count?: number;
-      /** @example 80 */
-      tickets_sold?: number;
-      /** @example 29.76 */
-      average_order_value?: string;
-    };
-    OrganizerReportRevenue: {
-      /** @example 1250.00 */
-      gross_revenue?: string;
-      /** @example 50.00 */
-      refunded_amount?: string;
-      /** @example 1200.00 */
-      net_revenue?: string;
-    };
-    OrganizerReportAttendance: {
-      /** @example 80 */
-      tickets_issued?: number;
-      /** @example 60 */
-      checked_in?: number;
-      /** @example 75.00 */
-      attendance_rate?: string;
-    };
-    OrganizerReportCommission: {
-      /** @example 125.00 */
-      commission_due?: string;
-      /** @example 50.00 */
-      commission_paid?: string;
-      /** @example 75.00 */
-      outstanding_commission?: string;
-    };
-    OrganizerReportMeta: {
-      /** Format: date-time */
-      from?: string | null;
-      /** Format: date-time */
-      to?: string | null;
-      /** @example USD */
-      currency?: string;
-      event_id?: number | null;
-    };
-    PaymentInstructionResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Payments\PaymentInstructionResource`.
-       * @example 1
-       */
-      payment_id?: number;
-      /** @example apisyria */
-      provider?: string;
-      /** @example WALLET-001 */
-      merchant_account?: string;
-      /** @example 120.00 */
-      amount?: string;
-      /** @example USD */
-      currency?: string;
-      /** Format: date-time */
-      expires_at?: string;
-      instructions?: string;
-    };
-    PaymentTransactionResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Payments\PaymentTransactionResource`.
-       * @example 1
-       */
-      id?: number;
-      /** @example 1 */
-      order_id?: number;
-      /** @example apisyria */
-      provider?: string;
-      /** @example APISYRIA-TX-1001 */
-      provider_transaction_id?: string | null;
-      /** @example TX-1001 */
-      transaction_number?: string | null;
-      /** @example 150.00 */
-      amount?: string;
-      /** @example USD */
-      currency?: string;
-      /** @enum {string} */
-      status?:
-        | 'pending'
-        | 'completed'
-        | 'failed'
-        | 'refunded'
-        | 'awaiting_transfer'
-        | 'verifying'
-        | 'paid'
-        | 'expired';
-      /** Format: date-time */
-      expires_at?: string | null;
-      /** @description Visible only to users with orders.manage permission. */
-      payload?: Record<string, never> | null;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    PlatformSettingResource: {
-      /** @description Projection of `App\Http\Resources\PlatformSettings\PlatformSettingResource`. */
-      id?: number;
-      commission_rate?: string;
-      settings?: Record<string, never>;
-      version?: number;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    ProductResource: {
-      /** @description Projection of `App\Http\Resources\Commerce\ProductResource`. */
-      id?: number;
-      event_id?: number | null;
-      name?: string;
-      description?: string | null;
-      price?: string;
-      is_active?: boolean;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    ProductVariantResource: {
-      /** @description Projection of `App\Http\Resources\Commerce\ProductVariantResource`. */
-      id?: number;
-      product_id?: number;
-      name?: string;
-      sku?: string | null;
-      price_override?: string | null;
-      is_active?: boolean;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    PromoCodeResource: {
-      /** @description Projection of `App\Http\Resources\Commerce\PromoCodeResource`. */
-      id?: number;
-      code?: string;
-      /** @enum {string} */
-      discount_type?: 'percent' | 'fixed';
-      discount_value?: string;
-      min_order_amount?: string | null;
-      max_uses?: number | null;
-      used_count?: number;
-      /** Format: date-time */
-      starts_at?: string | null;
-      /** Format: date-time */
-      expires_at?: string | null;
-      is_active?: boolean;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    /** @description Public catalog detail projection of a published event for anonymous visitors. */
-    PublicEventDetailItem: {
-      /**
-       * @description Projection of `App\Http\Resources\Events\PublicEventDetailResource`.
-       * @example 1
-       */
-      id: number;
-      /** @example summer-jazz-night */
-      slug: string;
-      /** @example Summer Jazz Night */
-      title: string;
-      /** @example A short teaser description for the catalog listing. */
-      description: string;
-      /** @example Harborview Pavilion */
-      venue: string;
-      /** Format: uri */
-      image_url?: string | null;
-      /**
-       * Format: date-time
-       * @example 2026-08-15T19:30:00Z
-       */
-      starts_at: string;
-      /**
-       * Format: date-time
-       * @example 2026-08-15T22:30:00Z
-       */
-      ends_at?: string | null;
-      starting_price?: {
-        /** @example 45.00 */
-        amount?: string;
-        /** @example USD */
-        currency?: string;
-      } | null;
-      ticket_types: {
-        /** @example 1 */
-        id: number;
-        /** @example General Admission */
-        name: string;
-        price: {
-          /** @example 45.00 */
-          amount: string;
-          /** @example USD */
-          currency: string;
+    schemas: {
+        ErrorResponse: {
+            /**
+             * @description Generic API error envelope returned by `ApiExceptionRenderer`.
+             * @example Resource not found.
+             */
+            message?: string;
         };
-        /** @example 42 */
-        remaining: number;
-        /** @example true */
-        is_available: boolean;
-        benefits?: string[] | null;
-        /** @example #336699 */
-        color?: string | null;
-      }[];
-    };
-    /** @description Public catalog projection of a published event for anonymous visitors. Intentionally separate from tenant EventResource. */
-    PublicEventListItem: {
-      /**
-       * @description Projection of `App\Http\Resources\Events\PublicEventListItemResource`.
-       * @example 1
-       */
-      id: number;
-      /** @example summer-jazz-night */
-      slug: string;
-      /** @example Summer Jazz Night */
-      title: string;
-      /** @example A short teaser description for the catalog listing. */
-      description: string;
-      /** @example Harborview Pavilion */
-      venue: string;
-      /** Format: uri */
-      image_url?: string | null;
-      /**
-       * Format: date-time
-       * @example 2026-08-15T19:30:00Z
-       */
-      starts_at: string;
-      starting_price?: {
+        MessageResponse: {
+            /**
+             * @description Plain message envelope returned by `ApiResponse::plainMessage()`.
+             * @example Operation completed successfully.
+             */
+            message?: string;
+        };
+        PaginationLinks: {
+            /** @description Projection of paginated list `links` envelope (see `ApiResponse::paginationLinks`). */
+            first?: string | null;
+            last?: string | null;
+            prev?: string | null;
+            next?: string | null;
+        };
+        PaginationMeta: {
+            /**
+             * @description Projection of paginated list `meta` envelope (see `ApiResponse::paginationMeta`).
+             * @example 1
+             */
+            current_page?: number;
+            /** @example 1 */
+            from?: number | null;
+            /** @example 3 */
+            last_page?: number;
+            /** @example /api/tenant/events */
+            path?: string;
+            /** @example 15 */
+            per_page?: number;
+            /** @example 15 */
+            to?: number | null;
+            /** @example 42 */
+            total?: number;
+        };
+        ValidationErrorResponse: {
+            /**
+             * @description Validation error envelope returned by Laravel `ValidationException` handler.
+             * @example The given data was invalid.
+             */
+            message?: string;
+            /**
+             * @example {
+             *       "email": [
+             *         "The email field is required."
+             *       ]
+             *     }
+             */
+            errors?: {
+                [key: string]: string[];
+            };
+        };
+        CreateEventRequest: {
+            /**
+             * @description Projection of `App\Http\Requests\Events\CreateEventRequest`.
+             * @example Summer Festival
+             */
+            name: string;
+            slug?: string | null;
+            category_id?: number | null;
+            description?: string | null;
+            banner_url?: string | null;
+            gallery?: string[] | null;
+            video_url?: string | null;
+            dj_info?: Record<string, never> | null;
+            /**
+             * Format: date-time
+             * @example 2026-08-01T18:00:00+00:00
+             */
+            start_datetime: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-02T02:00:00+00:00
+             */
+            end_datetime: string;
+        };
         /**
-         * @description Decimal amount as string (consistent with other money schemas in this spec).
-         * @example 45.00
+         * @example {
+         *       "event_id": 1,
+         *       "customer_name": "Jane Doe",
+         *       "customer_email": "jane@example.com",
+         *       "line_items": [
+         *         {
+         *           "ticket_type_id": 1,
+         *           "quantity": 2
+         *         }
+         *       ]
+         *     }
          */
-        amount?: string;
-        /** @example USD */
-        currency?: string;
-      } | null;
+        CreateOrderRequest: {
+            /**
+             * @description Projection of `App\Http\Requests\Orders\CreateOrderRequest`.
+             * @example 1
+             */
+            event_id: number;
+            /** @example Jane Doe */
+            customer_name: string;
+            /**
+             * Format: email
+             * @example jane@example.com
+             */
+            customer_email: string;
+            customer_phone?: string | null;
+            customer_user_id?: number | null;
+            reservation_id?: number | null;
+            line_items: {
+                /** @example 1 */
+                ticket_type_id: number;
+                /** @example 2 */
+                quantity: number;
+            }[];
+        };
+        /**
+         * @description Guest checkout payload. customer_user_id and reservation_id are not accepted.
+         * @example {
+         *       "event_id": 1,
+         *       "customer_name": "Jane Doe",
+         *       "customer_email": "jane@example.com",
+         *       "line_items": [
+         *         {
+         *           "ticket_type_id": 1,
+         *           "quantity": 2
+         *         }
+         *       ]
+         *     }
+         */
+        CreatePublicOrderRequest: {
+            /**
+             * @description Must reference a published event in the current venue.
+             * @example 1
+             */
+            event_id: number;
+            /** @example Jane Doe */
+            customer_name: string;
+            /**
+             * Format: email
+             * @example jane@example.com
+             */
+            customer_email: string;
+            customer_phone?: string | null;
+            line_items: {
+                /** @example 1 */
+                ticket_type_id: number;
+                /** @example 2 */
+                quantity: number;
+            }[];
+        };
+        InitiatePaymentRequest: {
+            /**
+             * @description Projection of `App\Http\Requests\Payments\InitiatePaymentRequest`.
+             * @example 1
+             */
+            order_id: number;
+            /** @example apisyria */
+            provider: string;
+        };
+        LoginRequest: {
+            /**
+             * Format: email
+             * @description Projection of `App\Http\Requests\Auth\LoginRequest`.
+             * @example owner@venue.com
+             */
+            email: string;
+            /**
+             * Format: password
+             * @example password
+             */
+            password: string;
+            /** @example web */
+            device_name?: string | null;
+        };
+        RecordCommissionPaymentRequest: {
+            venue_id: number;
+            /** @example 20.00 */
+            amount: string;
+            /** @example USD */
+            currency?: string;
+            /** @enum {string} */
+            payment_method: "cash" | "shamcash" | "syriatel_cash" | "bank_transfer" | "other";
+            reference_number?: string | null;
+            /** Format: date-time */
+            received_at: string;
+            payment_account_id?: number | null;
+            notes?: string | null;
+        };
+        RegisterRequest: {
+            /**
+             * @description Projection of `App\Http\Requests\Auth\RegisterRequest`.
+             * @example Jane Doe
+             */
+            name: string;
+            /**
+             * Format: email
+             * @example jane@example.com
+             */
+            email: string;
+            /** Format: password */
+            password: string;
+            /** Format: password */
+            password_confirmation: string;
+            phone?: string | null;
+        };
+        SubmitPublicPaymentVerificationRequest: {
+            /**
+             * @description Wallet provider transfer reference submitted by the guest.
+             * @example TX-1001
+             */
+            transaction_number: string;
+        };
+        VerifyPaymentRequest: {
+            /**
+             * @description Projection of `App\Http\Requests\Payments\VerifyPaymentRequest`.
+             * @example TX-1001
+             */
+            transaction_number: string;
+        };
+        AdminDashboardKpis: {
+            /** @example 125000.00 */
+            gross_revenue?: string;
+            /** @example 120000.00 */
+            net_revenue?: string;
+            /** @example 12500.00 */
+            commission_due?: string;
+            /** @example 9000.00 */
+            commission_paid?: string;
+            /** @example 3500.00 */
+            outstanding_commission?: string;
+            /** @example 42 */
+            active_events?: number;
+            /** @example 18 */
+            active_venues?: number;
+            /** @example 2400 */
+            orders_count?: number;
+            /** @example 4800 */
+            tickets_sold?: number;
+        };
+        AdminDashboardToday: {
+            /** @example 4500.00 */
+            today_sales?: string;
+            /** @example 4300.00 */
+            today_revenue?: string;
+            /** @example 60 */
+            today_orders?: number;
+            /** @example 180 */
+            today_check_ins?: number;
+            /** @example 3 */
+            events_starting_today?: number;
+        };
+        AdminDashboardOrder: {
+            order_number?: string;
+            customer_name?: string;
+            amount?: string;
+            status?: string;
+            venue_name?: string;
+            /** Format: date-time */
+            created_at?: string | null;
+        };
+        AdminDashboardPayment: {
+            id?: number;
+            venue_name?: string;
+            order_number?: string;
+            amount?: string;
+            currency?: string;
+            provider?: string;
+            status?: string;
+            /** Format: date-time */
+            verified_at?: string | null;
+        };
+        AdminDashboardCheckIn: {
+            ticket_number?: string;
+            holder_name?: string;
+            venue_name?: string;
+            /** Format: date-time */
+            checked_in_at?: string | null;
+            gate?: string | null;
+        };
+        AdminDashboardAlert: {
+            /** @enum {string} */
+            type?: "outstanding_commission" | "events_starting_today" | "failed_payment_verifications";
+            /** @enum {string} */
+            severity?: "info" | "warning" | "danger";
+            count?: number;
+            amount?: string | null;
+            message?: string;
+        };
+        AdminDashboardMeta: {
+            /** @example USD */
+            currency?: string;
+            /** Format: date-time */
+            generated_at?: string;
+        };
+        AdminReportPlatform: {
+            /** @example 50000.00 */
+            gross_revenue?: string;
+            /** @example 47500.00 */
+            net_revenue?: string;
+            /** @example 320 */
+            orders_count?: number;
+            /** @example 640 */
+            tickets_sold?: number;
+            /** @example 12 */
+            active_venues?: number;
+        };
+        AdminReportCommissions: {
+            /** @example 5000.00 */
+            commission_due?: string;
+            /** @example 2500.00 */
+            commission_paid?: string;
+            /** @example 150.00 */
+            commission_adjustments?: string;
+            /** @example 2350.00 */
+            outstanding_commission?: string;
+            monthly?: {
+                /** @example 2026-01 */
+                month?: string;
+                /** @example 1200.00 */
+                commission_due?: string;
+                /** @example 800.00 */
+                commission_paid?: string;
+            }[];
+        };
+        AdminReportTopVenue: {
+            venue_id?: number;
+            venue_name?: string;
+            subdomain?: string;
+            gross_sales?: string;
+            commission_due?: string;
+            outstanding_commission?: string;
+        };
+        AdminReportTopEvent: {
+            event_id?: number;
+            event_name?: string;
+            venue_id?: number;
+            venue_name?: string;
+            gross_sales?: string;
+            tickets_sold?: number;
+        };
+        AdminReportPaymentMethod: {
+            /** @example shamcash */
+            method?: string;
+            /** @example 42 */
+            transactions_count?: number;
+            /** @example 12500.00 */
+            total_amount?: string;
+        };
+        AdminReportRefunds: {
+            /** @example 8 */
+            refunds_count?: number;
+            /** @example 2500.00 */
+            refunded_amount?: string;
+            /** @example 5.00 */
+            refund_rate?: string;
+        };
+        AdminReportMeta: {
+            /** Format: date-time */
+            from?: string | null;
+            /** Format: date-time */
+            to?: string | null;
+            /** @example USD */
+            currency?: string;
+            /** @example 10 */
+            limit?: number;
+        };
+        ApiTokenResource: {
+            user?: components["schemas"]["AuthenticatedUserResource"];
+            /** @example 1|plainTextToken */
+            token?: string;
+            /** @example Bearer */
+            token_type?: string;
+        };
+        AuthenticatedUserResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Auth\AuthenticatedUserResource`.
+             * @example 1
+             */
+            id?: number;
+            /** @example Jane Doe */
+            name?: string;
+            /**
+             * Format: email
+             * @example jane@example.com
+             */
+            email?: string;
+            phone?: string | null;
+            /** @example false */
+            is_super_admin?: boolean;
+            /** Format: date-time */
+            email_verified_at?: string | null;
+            /** Format: date-time */
+            created_at?: string | null;
+        };
+        CategoryResource: {
+            /** @description Projection of `App\Http\Resources\Events\CategoryResource`. */
+            id?: number;
+            name?: string;
+            slug?: string;
+            description?: string | null;
+            sort_order?: number;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        CommissionPaymentResource: {
+            id?: number;
+            venue_id?: number;
+            payment_account_id?: number | null;
+            /** @example 20.00 */
+            amount?: string;
+            /** @example USD */
+            currency?: string;
+            /** @enum {string} */
+            payment_method?: "cash" | "shamcash" | "syriatel_cash" | "bank_transfer" | "other";
+            reference_number?: string | null;
+            /** Format: date-time */
+            received_at?: string;
+            received_by_user_id?: number;
+            notes?: string | null;
+            metadata?: Record<string, never> | null;
+            /** @example 10.00 */
+            outstanding_commission?: string;
+            /** Format: date-time */
+            created_at?: string;
+        };
+        CouponResource: {
+            /** @description Projection of `App\Http\Resources\Commerce\CouponResource`. */
+            id?: number;
+            code?: string;
+            /** @enum {string} */
+            discount_type?: "percent" | "fixed";
+            discount_value?: string;
+            min_order_amount?: string | null;
+            max_uses?: number | null;
+            used_count?: number;
+            /** Format: date-time */
+            starts_at?: string | null;
+            /** Format: date-time */
+            expires_at?: string | null;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        EventResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Events\EventResource`.
+             * @example 1
+             */
+            id?: number;
+            category_id?: number | null;
+            /** @example Summer Festival */
+            name?: string;
+            /** @example summer-festival */
+            slug?: string;
+            description?: string | null;
+            banner_url?: string | null;
+            gallery?: string[];
+            video_url?: string | null;
+            dj_info?: Record<string, never> | null;
+            /** Format: date-time */
+            start_datetime?: string;
+            /** Format: date-time */
+            end_datetime?: string;
+            /** @enum {string} */
+            status?: "draft" | "published" | "cancelled" | "completed";
+            /** @example 1 */
+            version?: number;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        OrderResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Orders\OrderResource`.
+             * @example 1
+             */
+            id?: number;
+            /** @example 1 */
+            event_id?: number;
+            customer_user_id?: number | null;
+            /** @example ORD-20260708-0001 */
+            order_number?: string;
+            /** @example 150.00 */
+            subtotal?: string;
+            /** @example 0.00 */
+            tax_amount?: string;
+            /** @example 0.00 */
+            discount_amount?: string;
+            /** @example 150.00 */
+            total?: string;
+            commission_amount?: string | null;
+            coupon_id?: number | null;
+            promo_code_id?: number | null;
+            payment_method?: string | null;
+            payment_reference?: string | null;
+            /** @enum {string} */
+            status?: "pending" | "paid" | "failed" | "refunded" | "cancelled";
+            /** @example Jane Doe */
+            customer_name?: string;
+            /** Format: email */
+            customer_email?: string;
+            customer_phone?: string | null;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        OrganizerDashboardKpis: {
+            /** @example 12500.00 */
+            gross_sales?: string;
+            /** @example 12000.00 */
+            net_revenue?: string;
+            /** @example 84 */
+            orders_count?: number;
+            /** @example 160 */
+            tickets_sold?: number;
+            /** @example 40 */
+            tickets_remaining?: number;
+            /** @example 72.50 */
+            attendance_rate?: string;
+            /** @example 350.00 */
+            outstanding_commission?: string;
+        };
+        OrganizerDashboardToday: {
+            /** @example 450.00 */
+            today_sales?: string;
+            /** @example 6 */
+            today_orders?: number;
+            /** @example 18 */
+            today_check_ins?: number;
+            /** @example 430.00 */
+            today_revenue?: string;
+        };
+        OrganizerDashboardEvent: {
+            id?: number;
+            name?: string;
+            /** Format: date-time */
+            starts_at?: string;
+            tickets_sold?: number;
+            capacity?: number;
+            remaining?: number;
+            status?: string;
+        };
+        OrganizerDashboardOrder: {
+            order_number?: string;
+            customer_name?: string;
+            amount?: string;
+            status?: string;
+            /** Format: date-time */
+            created_at?: string | null;
+        };
+        OrganizerDashboardCheckIn: {
+            ticket_number?: string;
+            holder_name?: string;
+            /** Format: date-time */
+            checked_in_at?: string | null;
+            gate?: string | null;
+        };
+        OrganizerDashboardCommission: {
+            /** @example 1250.00 */
+            due?: string;
+            /** @example 900.00 */
+            paid?: string;
+            /** @example 350.00 */
+            outstanding?: string;
+        };
+        OrganizerDashboardMeta: {
+            /** @example USD */
+            currency?: string;
+            /** Format: date-time */
+            generated_at?: string;
+        };
+        OrganizerReportSales: {
+            /** @example 1250.00 */
+            gross_sales?: string;
+            /** @example 42 */
+            orders_count?: number;
+            /** @example 80 */
+            tickets_sold?: number;
+            /** @example 29.76 */
+            average_order_value?: string;
+        };
+        OrganizerReportRevenue: {
+            /** @example 1250.00 */
+            gross_revenue?: string;
+            /** @example 50.00 */
+            refunded_amount?: string;
+            /** @example 1200.00 */
+            net_revenue?: string;
+        };
+        OrganizerReportAttendance: {
+            /** @example 80 */
+            tickets_issued?: number;
+            /** @example 60 */
+            checked_in?: number;
+            /** @example 75.00 */
+            attendance_rate?: string;
+        };
+        OrganizerReportCommission: {
+            /** @example 125.00 */
+            commission_due?: string;
+            /** @example 50.00 */
+            commission_paid?: string;
+            /** @example 75.00 */
+            outstanding_commission?: string;
+        };
+        OrganizerReportMeta: {
+            /** Format: date-time */
+            from?: string | null;
+            /** Format: date-time */
+            to?: string | null;
+            /** @example USD */
+            currency?: string;
+            event_id?: number | null;
+        };
+        PaymentInstructionResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Payments\PaymentInstructionResource`.
+             * @example 1
+             */
+            payment_id?: number;
+            /** @example apisyria */
+            provider?: string;
+            /** @example WALLET-001 */
+            merchant_account?: string;
+            /** @example 120.00 */
+            amount?: string;
+            /** @example USD */
+            currency?: string;
+            /** Format: date-time */
+            expires_at?: string;
+            instructions?: string;
+        };
+        PaymentTransactionResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Payments\PaymentTransactionResource`.
+             * @example 1
+             */
+            id?: number;
+            /** @example 1 */
+            order_id?: number;
+            /** @example apisyria */
+            provider?: string;
+            /** @example APISYRIA-TX-1001 */
+            provider_transaction_id?: string | null;
+            /** @example TX-1001 */
+            transaction_number?: string | null;
+            /** @example 150.00 */
+            amount?: string;
+            /** @example USD */
+            currency?: string;
+            /** @enum {string} */
+            status?: "pending" | "completed" | "failed" | "refunded" | "awaiting_transfer" | "verifying" | "paid" | "expired";
+            /** Format: date-time */
+            expires_at?: string | null;
+            /** @description Visible only to users with orders.manage permission. */
+            payload?: Record<string, never> | null;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        PlatformSettingResource: {
+            /** @description Projection of `App\Http\Resources\PlatformSettings\PlatformSettingResource`. */
+            id?: number;
+            commission_rate?: string;
+            settings?: Record<string, never>;
+            version?: number;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        ProductResource: {
+            /** @description Projection of `App\Http\Resources\Commerce\ProductResource`. */
+            id?: number;
+            event_id?: number | null;
+            name?: string;
+            description?: string | null;
+            price?: string;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        ProductVariantResource: {
+            /** @description Projection of `App\Http\Resources\Commerce\ProductVariantResource`. */
+            id?: number;
+            product_id?: number;
+            name?: string;
+            sku?: string | null;
+            price_override?: string | null;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        PromoCodeResource: {
+            /** @description Projection of `App\Http\Resources\Commerce\PromoCodeResource`. */
+            id?: number;
+            code?: string;
+            /** @enum {string} */
+            discount_type?: "percent" | "fixed";
+            discount_value?: string;
+            min_order_amount?: string | null;
+            max_uses?: number | null;
+            used_count?: number;
+            /** Format: date-time */
+            starts_at?: string | null;
+            /** Format: date-time */
+            expires_at?: string | null;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        /** @description Public catalog detail projection of a published event for anonymous visitors. */
+        PublicEventDetailItem: {
+            /**
+             * @description Projection of `App\Http\Resources\Events\PublicEventDetailResource`.
+             * @example 1
+             */
+            id: number;
+            /** @example summer-jazz-night */
+            slug: string;
+            /** @example Summer Jazz Night */
+            title: string;
+            /** @example A short teaser description for the catalog listing. */
+            description: string;
+            /** @example Harborview Pavilion */
+            venue: string;
+            /** Format: uri */
+            image_url?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-08-15T19:30:00Z
+             */
+            starts_at: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-15T22:30:00Z
+             */
+            ends_at?: string | null;
+            starting_price?: {
+                /** @example 45.00 */
+                amount?: string;
+                /** @example USD */
+                currency?: string;
+            } | null;
+            ticket_types: {
+                /** @example 1 */
+                id: number;
+                /** @example General Admission */
+                name: string;
+                price: {
+                    /** @example 45.00 */
+                    amount: string;
+                    /** @example USD */
+                    currency: string;
+                };
+                /** @example 42 */
+                remaining: number;
+                /** @example true */
+                is_available: boolean;
+                benefits?: string[] | null;
+                /** @example #336699 */
+                color?: string | null;
+            }[];
+        };
+        /** @description Public catalog projection of a published event for anonymous visitors. Intentionally separate from tenant EventResource. */
+        PublicEventListItem: {
+            /**
+             * @description Projection of `App\Http\Resources\Events\PublicEventListItemResource`.
+             * @example 1
+             */
+            id: number;
+            /** @example summer-jazz-night */
+            slug: string;
+            /** @example Summer Jazz Night */
+            title: string;
+            /** @example A short teaser description for the catalog listing. */
+            description: string;
+            /** @example Harborview Pavilion */
+            venue: string;
+            /** Format: uri */
+            image_url?: string | null;
+            /**
+             * Format: date-time
+             * @example 2026-08-15T19:30:00Z
+             */
+            starts_at: string;
+            starting_price?: {
+                /**
+                 * @description Decimal amount as string (consistent with other money schemas in this spec).
+                 * @example 45.00
+                 */
+                amount?: string;
+                /** @example USD */
+                currency?: string;
+            } | null;
+        };
+        /** @description Limited public projection of a guest-created order. Internal financial fields are omitted. */
+        PublicOrderResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Orders\PublicOrderResource`.
+             * @example 1
+             */
+            id: number;
+            /** @example ORD-ABC12345 */
+            order_number: string;
+            /** @example pending */
+            status: string;
+            /** @example 150.00 */
+            total: string;
+            /** @example Jane Doe */
+            customer_name: string;
+            /**
+             * Format: email
+             * @example jane@example.com
+             */
+            customer_email: string;
+        };
+        /** @description Guest-facing payment instructions. Numeric payment and account ids are intentionally omitted. */
+        PublicPaymentInstructionResource: {
+            /**
+             * @description Wallet brand label for the guest.
+             * @example shamcash
+             */
+            provider: string;
+            /** @example WALLET-001 */
+            merchant_account: string;
+            /** @example 120.00 */
+            amount: string;
+            /** @example USD */
+            currency: string;
+            /** Format: date-time */
+            expires_at: string;
+            instructions: string;
+        };
+        /** @description Guest-facing verification outcome. Internal payment fields are omitted. */
+        PublicPaymentVerificationResource: {
+            /**
+             * @description Projection of `App\Http\Resources\Payments\PublicPaymentVerificationResource`.
+             * @example paid
+             * @enum {string}
+             */
+            status: "paid" | "failed" | "verifying" | "awaiting_transfer" | "expired";
+            /** @example Payment confirmed. */
+            message: string;
+        };
+        SettlementSummary: {
+            /** @example 125000.00 */
+            gross_sales?: string;
+            /** @example 320 */
+            tickets_sold?: number;
+            /** @example 1250.00 */
+            commission_due?: string;
+            /** @example 500.00 */
+            commission_paid?: string;
+            /** @example 50.00 */
+            commission_adjustments?: string;
+            /** @example 700.00 */
+            commission_outstanding?: string;
+            /** @example 5000.00 */
+            refunds?: string;
+            /** @example 120000.00 */
+            net_sales?: string;
+            /** @example USD */
+            currency?: string;
+        };
+        SettlementLedgerEntry: {
+            id?: number;
+            /** Format: date-time */
+            date?: string;
+            type?: string;
+            description?: string;
+            /** @example 10.00 */
+            credit?: string;
+            /** @example 0.00 */
+            debit?: string;
+            /** @example 150.00 */
+            balance?: string;
+            order_id?: number | null;
+            event_id?: number | null;
+        };
+        AdminSettlementVenueListResponse: {
+            data?: Record<string, never>[];
+            meta?: Record<string, never>;
+        };
+        TaxRateResource: {
+            /** @description Projection of `App\Http\Resources\TaxRates\TaxRateResource`. */
+            id?: number;
+            name?: string;
+            rate?: string;
+            is_active?: boolean;
+            version?: number;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
+        TicketCheckInResult: {
+            /** @example true */
+            valid: boolean;
+            /** @example EV000001-260801-000001 */
+            ticket_number: string;
+            /** @example Jane Doe */
+            holder_name: string;
+            /** @example Summer Fest */
+            event_name: string;
+            /** @enum {string} */
+            status: "checked_in";
+        };
+        TicketTypeResource: {
+            /** @description Projection of `App\Http\Resources\Events\TicketTypeResource`. */
+            id?: number;
+            event_id?: number;
+            name?: string;
+            price?: string;
+            quantity?: number;
+            quantity_sold?: number;
+            /** Format: date-time */
+            sale_start?: string | null;
+            /** Format: date-time */
+            sale_end?: string | null;
+            benefits?: string[];
+            color?: string | null;
+            version?: number;
+            /** Format: date-time */
+            created_at?: string | null;
+            /** Format: date-time */
+            updated_at?: string | null;
+        };
     };
-    /** @description Limited public projection of a guest-created order. Internal financial fields are omitted. */
-    PublicOrderResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Orders\PublicOrderResource`.
-       * @example 1
-       */
-      id: number;
-      /** @example ORD-ABC12345 */
-      order_number: string;
-      /** @example pending */
-      status: string;
-      /** @example 150.00 */
-      total: string;
-      /** @example Jane Doe */
-      customer_name: string;
-      /**
-       * Format: email
-       * @example jane@example.com
-       */
-      customer_email: string;
-    };
-    /** @description Guest-facing payment instructions. Numeric payment and account ids are intentionally omitted. */
-    PublicPaymentInstructionResource: {
-      /**
-       * @description Wallet brand label for the guest.
-       * @example shamcash
-       */
-      provider: string;
-      /** @example WALLET-001 */
-      merchant_account: string;
-      /** @example 120.00 */
-      amount: string;
-      /** @example USD */
-      currency: string;
-      /** Format: date-time */
-      expires_at: string;
-      instructions: string;
-    };
-    /** @description Guest-facing verification outcome. Internal payment fields are omitted. */
-    PublicPaymentVerificationResource: {
-      /**
-       * @description Projection of `App\Http\Resources\Payments\PublicPaymentVerificationResource`.
-       * @example paid
-       * @enum {string}
-       */
-      status: 'paid' | 'failed' | 'verifying' | 'awaiting_transfer' | 'expired';
-      /** @example Payment confirmed. */
-      message: string;
-    };
-    SettlementSummary: {
-      /** @example 125000.00 */
-      gross_sales?: string;
-      /** @example 320 */
-      tickets_sold?: number;
-      /** @example 1250.00 */
-      commission_due?: string;
-      /** @example 500.00 */
-      commission_paid?: string;
-      /** @example 50.00 */
-      commission_adjustments?: string;
-      /** @example 700.00 */
-      commission_outstanding?: string;
-      /** @example 5000.00 */
-      refunds?: string;
-      /** @example 120000.00 */
-      net_sales?: string;
-      /** @example USD */
-      currency?: string;
-    };
-    SettlementLedgerEntry: {
-      id?: number;
-      /** Format: date-time */
-      date?: string;
-      type?: string;
-      description?: string;
-      /** @example 10.00 */
-      credit?: string;
-      /** @example 0.00 */
-      debit?: string;
-      /** @example 150.00 */
-      balance?: string;
-      order_id?: number | null;
-      event_id?: number | null;
-    };
-    AdminSettlementVenueListResponse: {
-      data?: Record<string, never>[];
-      meta?: Record<string, never>;
-    };
-    TaxRateResource: {
-      /** @description Projection of `App\Http\Resources\TaxRates\TaxRateResource`. */
-      id?: number;
-      name?: string;
-      rate?: string;
-      is_active?: boolean;
-      version?: number;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-    TicketCheckInResult: {
-      /** @example true */
-      valid: boolean;
-      /** @example EV000001-260801-000001 */
-      ticket_number: string;
-      /** @example Jane Doe */
-      holder_name: string;
-      /** @example Summer Fest */
-      event_name: string;
-      /** @enum {string} */
-      status: 'checked_in';
-    };
-    TicketTypeResource: {
-      /** @description Projection of `App\Http\Resources\Events\TicketTypeResource`. */
-      id?: number;
-      event_id?: number;
-      name?: string;
-      price?: string;
-      quantity?: number;
-      quantity_sold?: number;
-      /** Format: date-time */
-      sale_start?: string | null;
-      /** Format: date-time */
-      sale_end?: string | null;
-      benefits?: string[];
-      color?: string | null;
-      version?: number;
-      /** Format: date-time */
-      created_at?: string | null;
-      /** Format: date-time */
-      updated_at?: string | null;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  'api.health': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "api.health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Service is healthy */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example ok */
+                        status?: string;
+                        /** @example Event Platform */
+                        service?: string;
+                    };
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Service is healthy */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "auth.register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': {
-            /** @example ok */
-            status?: string;
-            /** @example Event Platform */
-            service?: string;
-          };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterRequest"];
+            };
         };
-      };
+        responses: {
+            /** @description User registered */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["ApiTokenResource"];
+                    };
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
     };
-  };
-  'auth.register': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "auth.login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Authenticated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["ApiTokenResource"];
+                    };
+                };
+            };
+            /** @description Invalid credentials */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RegisterRequest'];
-      };
+    "auth.password.forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: email */
+                    email: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Reset link sent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description User registered */
-      201: {
-        headers: {
-          [name: string]: unknown;
+    "auth.password.reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': {
-            data?: components['schemas']['ApiTokenResource'];
-          };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: email */
+                    email: string;
+                    /** Format: password */
+                    password: string;
+                    /** Format: password */
+                    password_confirmation: string;
+                    token: string;
+                };
+            };
         };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
+        responses: {
+            /** @description Password reset */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
         };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.login': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "auth.logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Logged out */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LoginRequest'];
-      };
+    "auth.logout-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All sessions revoked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Authenticated */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "auth.user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': {
-            data?: components['schemas']['ApiTokenResource'];
-          };
+        requestBody?: never;
+        responses: {
+            /** @description Current user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["AuthenticatedUserResource"];
+                    };
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
-      };
-      /** @description Invalid credentials */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.password.forgot': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "auth.password.change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: password */
+                    current_password: string;
+                    /** Format: password */
+                    password: string;
+                    /** Format: password */
+                    password_confirmation: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Password changed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': {
-          /** Format: email */
-          email: string;
+    "verification.send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
+        requestBody?: never;
+        responses: {
+            /** @description Verification email sent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Reset link sent */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "verification.verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                hash: string;
+            };
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
+        requestBody?: never;
+        responses: {
+            /** @description Email verified */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.password.reset': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "platform.settings.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Platform settings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PlatformSettingResource"];
+                    };
+                };
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        'application/json': {
-          /** Format: email */
-          email: string;
-          /** Format: password */
-          password: string;
-          /** Format: password */
-          password_confirmation: string;
-          token: string;
+    "platform.settings.update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
+        requestBody: {
+            content: {
+                "application/json": {
+                    version: number;
+                    commission_rate?: number;
+                    settings?: Record<string, never>;
+                };
+            };
+        };
+        responses: {
+            /** @description Updated settings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PlatformSettingResource"];
+                    };
+                };
+            };
+            /** @description Stale version */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Password reset */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "public.events.index": {
+        parameters: {
+            query?: {
+                page?: number;
+                per_page?: number;
+                sort?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
+        requestBody?: never;
+        responses: {
+            /** @description Paginated published events */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PublicEventListItem"][];
+                        meta?: components["schemas"]["PaginationMeta"];
+                        links?: components["schemas"]["PaginationLinks"];
+                    };
+                };
+            };
         };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.logout': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "public.events.show": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Published event detail */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PublicEventDetailItem"];
+                    };
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Logged out */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "public.orders.store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePublicOrderRequest"];
+            };
         };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
+        responses: {
+            /** @description Guest order created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PublicOrderResource"];
+                    };
+                };
+            };
+            /** @description Validation or business rule error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description Too many requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.logout-all': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "public.orders.payment-instructions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Payment instructions created or reused (idempotent) */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PublicPaymentInstructionResource"];
+                    };
+                };
+            };
+            /** @description Order not found, not pending, or not in this venue */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation or business rule error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description Too many requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description All sessions revoked */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    "public.orders.payment-verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderNumber: string;
+            };
+            cookie?: never;
         };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitPublicPaymentVerificationRequest"];
+            };
         };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
+        responses: {
+            /** @description Verification result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data?: components["schemas"]["PublicPaymentVerificationResource"];
+                    };
+                };
+            };
+            /** @description Order or active payment instruction not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation or business rule error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description Too many requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
     };
-  };
-  'auth.user': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Current user */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['AuthenticatedUserResource'];
-          };
-        };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'auth.password.change': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': {
-          /** Format: password */
-          current_password: string;
-          /** Format: password */
-          password: string;
-          /** Format: password */
-          password_confirmation: string;
-        };
-      };
-    };
-    responses: {
-      /** @description Password changed */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
-        };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
-    };
-  };
-  'verification.send': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Verification email sent */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
-        };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'verification.verify': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: number;
-        hash: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Email verified */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['MessageResponse'];
-        };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'platform.settings.show': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Platform settings */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PlatformSettingResource'];
-          };
-        };
-      };
-      /** @description Unauthenticated */
-      401: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'platform.settings.update': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': {
-          version: number;
-          commission_rate?: number;
-          settings?: Record<string, never>;
-        };
-      };
-    };
-    responses: {
-      /** @description Updated settings */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PlatformSettingResource'];
-          };
-        };
-      };
-      /** @description Stale version */
-      409: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
-    };
-  };
-  'public.events.index': {
-    parameters: {
-      query?: {
-        page?: number;
-        per_page?: number;
-        sort?: string;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Paginated published events */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PublicEventListItem'][];
-            meta?: components['schemas']['PaginationMeta'];
-            links?: components['schemas']['PaginationLinks'];
-          };
-        };
-      };
-    };
-  };
-  'public.events.show': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        slug: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Published event detail */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PublicEventDetailItem'];
-          };
-        };
-      };
-      /** @description Not found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'public.orders.store': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreatePublicOrderRequest'];
-      };
-    };
-    responses: {
-      /** @description Guest order created */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PublicOrderResource'];
-          };
-        };
-      };
-      /** @description Validation or business rule error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
-      /** @description Too many requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'public.orders.payment-instructions': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        orderNumber: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Payment instructions created or reused (idempotent) */
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PublicPaymentInstructionResource'];
-          };
-        };
-      };
-      /** @description Order not found, not pending, or not in this venue */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation or business rule error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
-      /** @description Too many requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
-  'public.orders.payment-verification': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        orderNumber: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SubmitPublicPaymentVerificationRequest'];
-      };
-    };
-    responses: {
-      /** @description Verification result */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': {
-            data?: components['schemas']['PublicPaymentVerificationResource'];
-          };
-        };
-      };
-      /** @description Order or active payment instruction not found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation or business rule error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ValidationErrorResponse'];
-        };
-      };
-      /** @description Too many requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-    };
-  };
 }
