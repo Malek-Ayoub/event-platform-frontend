@@ -17,6 +17,7 @@
     "@event-platform/shared": "workspace:*",
     "@event-platform/tenant": "workspace:*",
     "@event-platform/ui": "workspace:*",
+    "@sentry/nextjs": "10.66.0",
     "@tanstack/react-query": "^5.64.1",
     "next": "^15.1.6",
     "react": "^19.0.0",
